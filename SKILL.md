@@ -1,3 +1,8 @@
+---
+name: shiplift
+description: Analyze a software repository and turn shipped engineering work into clear, evidence-based achievements, standup updates, and manager 1:1 talking points.
+---
+
 # ShipLift: Transform Engineering Work into Meaningful Achievements
 
 **ShipLift** analyzes a software repository and converts engineering work into meaningful achievements. The goal is not to summarize commits—it's to understand what you shipped, determine why it matters, and communicate it clearly.
@@ -189,6 +194,198 @@ See detailed documentation in the `references/` folder:
 5. **Rank** candidate achievements
 6. **Generate** final achievements with supporting points
 7. **Output** in the specified format for the command
+
+---
+
+## Agent Analysis Workflow
+
+When you receive a ShipLift command, follow this process:
+
+### 1. Detect and Validate Repository
+
+- Detect the current repository location
+- Identify the repository name and git URL
+- Confirm access to git history and diffs
+- Detect the current branch and default branch
+
+### 2. Parse Command and Time Period
+
+**ShipLift Quarter:**
+- Determine current calendar quarter (or parse specified quarter)
+- Set start date (e.g., 2024-Q3 = Jul 1 - Sep 30)
+- Set end date (e.g., 2024-Q3 = Sep 30)
+
+**ShipLift Standup:**
+- Parse time period (default: 1 week)
+- Set start date (e.g., 1-week-ago)
+- Set end date (now)
+
+**ShipLift 1:1:**
+- Parse time period (default: 1 month)
+- Set start date (e.g., 1-month-ago)
+- Set end date (now)
+
+### 3. Gather Repository Evidence
+
+Inspect (in priority order):
+
+1. **Git History**
+   - `git log` with the specified date range
+   - Commit messages and authors
+   - Commit timestamps
+
+2. **Git Diffs**
+   - `git diff` between relevant commits
+   - Files changed, lines added/removed
+   - Specific code changes
+
+3. **Pull Requests/Issues** (if available)
+   - PR titles and descriptions
+   - Issue descriptions and linked PRs
+   - Review comments and approvals
+
+4. **Test Information** (if available)
+   - Test file changes
+   - Coverage reports or metrics
+   - New tests added
+
+5. **Build/CI Information** (if available)
+   - CI logs and build times
+   - Performance benchmark results
+   - Deployment information
+
+### 4. Build Evidence Matrix
+
+For each group of related commits:
+
+- **Direct Measurement:** Performance metrics, test counts, coverage percentages
+- **Code Diffs:** Files changed, implementation details
+- **PR Context:** Description, linked issues, review comments
+- **Commit Messages:** Descriptions (as hints only)
+
+**Never use inference alone.** Always ground claims in evidence from above.
+
+### 5. Apply Git Intelligence Rules
+
+Group related commits using:
+
+- **Same PR:** Likely one feature
+- **Same Issue:** Likely related work
+- **Same Branch:** May be one feature/fix
+- **Overlapping Files:** May be coordinated
+- **Same Time Period:** May be related
+- **Same Component:** May tell one story
+
+Recognized patterns:
+- Feature + Tests + Validation = ONE achievement
+- Refactor + Feature (if enables feature) = ONE achievement
+- Related bugs in same flow = ONE reliability story
+- Related performance changes = ONE performance story
+- Developer tooling improvements = ONE DX story
+
+### 6. Rank Candidate Achievements
+
+Score each achievement on 7 dimensions (0-10 scale):
+
+1. **Scope:** Breadth of impact
+2. **Complexity:** Difficulty to implement
+3. **Impact:** Value created
+4. **Measurability:** How quantifiable
+5. **Long-term Value:** Enables future work
+6. **Product Relevance:** Alignment with strategy
+7. **Evidence Confidence:** How certain
+
+**Quarter output:** Select top 5-7 achievements by score (or fewer if only fewer have strong evidence)
+
+**Standup output:** Sort by recency and status (Done/Next/Blockers)
+
+**1:1 output:** Use highest-scoring achievements plus learning/growth
+
+### 7. Generate Final Achievements
+
+For each achievement:
+
+```
+[Outcome-Oriented Title]
+
+- Point 1: Specific action with metric (if applicable)
+- Point 2: Technical or quality improvement
+- Point 3 (optional): Value or long-term benefit
+```
+
+**Rules:**
+- Title must describe the outcome, not activity
+- Each point must have evidence
+- Metrics must be calculated correctly
+- Language must be simple and clear
+- No corporate buzzwords
+- No invented claims
+
+### 8. Validate Against Anti-BS Rules
+
+Before outputting, verify:
+
+- ✅ No invented percentages
+- ✅ No invented business impact
+- ✅ No invented customer impact
+- ✅ No invented hours saved
+- ✅ No invented leadership
+- ✅ Accurate attribution
+- ✅ No unsourced stakeholder feedback
+
+If uncertain about a claim, remove it or rephrase with evidence.
+
+### 9. Format and Output
+
+**Quarter output:**
+```
+# Q[quarter] [year] — Key Achievements
+
+## 1. [Title]
+- Point
+- Point
+- Point
+
+## 2. [Title]
+...
+
+[5-7 total]
+```
+
+**Standup output:**
+```
+### Done
+- Item with PR/issue reference
+
+### Next
+- Item with status/percentage
+
+### Blockers
+- Item with issue reference
+```
+
+**1:1 output:**
+```
+# 1:1 — Key Talking Points
+
+### What I Delivered
+- ...
+
+### Impact
+- ...
+
+### Challenges
+- ...
+
+### Growth
+- ...
+
+### Next Focus
+- ...
+
+### Topics to Discuss
+- ...
+```
 
 ---
 

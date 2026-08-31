@@ -370,31 +370,96 @@ The Anti-BS Rules are mandatory and enforced.
 
 ---
 
+## The Difference: Engineering Impact vs. Commit Summary
+
+### Commit Summary Approach
+```
+"I made 8 commits this week"
+"Fixed bug, added feature, improved tests"
+"Worked on authentication and performance"
+```
+
+**Problem:** Focuses on activity, not impact.
+
+### ShipLift Engineering Impact Approach
+```
+Settings Experience Delivery & Reliability
+
+- Implemented settings page with API integration and full validation
+- Added comprehensive error handling for API failures
+- Wrote tests covering main flows and edge cases (12 new tests)
+
+Frontend Performance Optimization
+
+- Reduced bundle size by 12% (245KB → 215KB)
+- Improved load time from 3.2s to 2.1s (34% faster)
+```
+
+**Benefit:** Communicates what you actually shipped and why it mattered.
+
+---
+
 ## Installation
+
+ShipLift follows the **Agent Skills** standard structure and can be installed into any supported coding agent.
 
 ### For Claude Code
 
-1. Locate your skills directory (ask Claude or check settings)
-2. Clone or copy the `shiplift/` directory there
-3. Restart Claude Code
-4. Use commands like: `ShipLift Quarter`
+1. Clone or download this repository: `https://github.com/bishoy-bishai/ShipLift`
+2. Locate your Claude Code skills directory:
+   - Run: `Claude: Show Skills Directory` in your command palette
+   - Or check: `~/.claude/skills/`
+3. Copy the repository folder to your skills directory
+4. Restart Claude Code
+5. Use commands like: `ShipLift Quarter`
 
-### For OpenAI Codex / Other Coding Agents
+**Official Reference:** [Claude Code Skills](https://claude.ai/docs/skills)
 
-1. Locate your skills/plugins directory
-2. Copy `shiplift/` directory there
-3. Follow your agent's skill registration process
-4. Invoke with appropriate syntax for your agent
+### For OpenAI Codex
 
-### Manual Usage
+1. Clone this repository: `https://github.com/bishoy-bishai/ShipLift`
+2. Locate your Codex plugins directory (configuration depends on your setup)
+3. Copy the repository folder to your plugins directory
+4. Register the skill with Codex using your tool's registration method
+5. Use commands like: `ShipLift Quarter`
 
-You can also use this skill manually:
+**Official Reference:** Check your OpenAI Codex documentation for skill/plugin installation
 
-1. Read `SKILL.md` for overview
-2. Read `references/` files for detailed rules
-3. Analyze a repository against these rules
-4. Generate achievements following the patterns
-5. Validate against `VALIDATION.md`
+### For Cursor
+
+1. Clone this repository: `https://github.com/bishoy-bishai/ShipLift`
+2. Locate your Cursor skills directory:
+   - Typically: `~/.cursor/skills/` or check Cursor settings
+3. Copy the repository folder to your skills directory
+4. Restart Cursor
+5. Use commands like: `ShipLift Quarter`
+
+**Official Reference:** [Cursor Skills Documentation](https://docs.cursor.com)
+
+### For Google Antigravity
+
+1. Clone this repository: `https://github.com/bishoy-bishai/ShipLift`
+2. Follow your Antigravity agent setup for importing skills
+3. Point Antigravity to the ShipLift repository location
+4. Register the skill with your Antigravity configuration
+5. Use commands like: `ShipLift Quarter`
+
+**Official Reference:** Google Antigravity documentation (consult official Google AI agent docs)
+
+### Manual Usage (No Coding Agent)
+
+You can use ShipLift manually without an agent:
+
+1. Read [SKILL.md](SKILL.md) for the framework
+2. Analyze your repository against the rules in `references/`
+3. Group your work using [intelligence-rules.md](references/intelligence-rules.md)
+4. Rank using the [impact-engine.md](references/impact-engine.md)
+5. Generate achievements using [output-templates.md](references/output-templates.md)
+6. Validate against [VALIDATION.md](VALIDATION.md)
+
+---
+
+## Manual Usage
 
 ---
 
@@ -416,68 +481,6 @@ ShipLift has been validated against 12 acceptance tests covering:
 - ✅ No padding to hit targets
 
 See `VALIDATION.md` for full test suite.
-
----
-
-## Example: Before and After
-
-### Raw Git Activity
-
-```
-Commits:
-1. Add settings page UI
-2. Connect settings API
-3. Add form validation
-4. Add error handling
-5. Add tests for settings
-6. Fix edge case bug
-7. Update documentation
-8. Refactor component state
-```
-
-### Without ShipLift
-
-```
-"I made 8 commits this week and updated settings features."
-```
-
-### With ShipLift
-
-```
-Settings Experience Delivery & Reliability
-
-- Implemented settings page with API integration and full validation
-- Added comprehensive error handling for API failures
-- Wrote tests covering main flows and edge cases (12 new tests)
-- Resolved edge case in settings persistence
-- Refactored component state for improved maintainability
-```
-
----
-
-## Key Differences from Commit Summaries
-
-### Commit Summary
-
-```
-"Fixed bug, added feature, improved tests"
-```
-
-### ShipLift Achievement
-
-```
-"Feature Delivery & Quality Improvements
-- Implemented requested feature with validation
-- Resolved 2 related bugs in the flow
-- Expanded test coverage (120 → 162 tests)"
-```
-
-**ShipLift differs by:**
-- ✅ Grouping related work
-- ✅ Highlighting value, not activity
-- ✅ Using evidence-backed metrics
-- ✅ Telling a coherent story
-- ✅ Focusing on impact
 
 ---
 
