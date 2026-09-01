@@ -207,6 +207,70 @@ Add at the top when useful:
 
 ---
 
+## CV Evidence Template
+
+### Full Structure
+
+```
+# 📄 CV Evidence
+
+## [Role / Company]
+
+### Strongest Contributions
+
+- [CV bullet: Action + Technical Context + Outcome]
+- [CV bullet]
+- [CV bullet]
+- [CV bullet]
+- [CV bullet]
+
+### Technical Highlights
+
+- [Technology or theme actually supported by evidence]
+- [Technology or theme]
+- [Technology or theme]
+```
+
+Optionally follow with an evidence-trace section so the user can validate each bullet:
+
+```
+## Evidence Behind the Bullets
+
+### Bullet 1
+Evidence:
+- [Supporting fact 1]
+- [Supporting fact 2]
+- [Supporting fact 3]
+
+Strength:
+[Strong Evidence / Medium Evidence]
+
+Metric:
+[Metric, if any — e.g. "+35% test suite growth"]
+```
+
+### Metadata
+
+Add at the top when useful:
+
+```
+**Period Analyzed:** [Date range, or "Full available history"]
+**Repository:** [Repo name]
+**Note:** This reflects repository evidence only, not complete employment history.
+```
+
+### Insufficient Evidence
+
+```
+Only 4 strong CV contributions were found. Additional smaller
+changes exist but do not have enough evidence to support a
+CV-ready bullet.
+```
+
+See [Career Evidence Engine](career-evidence-engine.md) for the full aggregation, evidence-strength, and anti-BS rules behind this output.
+
+---
+
 ## Common Patterns for Points
 
 ### Measuring Implementation

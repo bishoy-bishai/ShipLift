@@ -11,11 +11,12 @@ ShipLift analyzes your repository and converts raw engineering activity into cle
 ### For Claude Code / OpenAI Codex Users
 
 1. Copy the `shiplift/` directory to your skills directory
-2. Use one of the four commands:
+2. Use one of the commands:
    - `ShipLift Quarter` - Analyze current quarter (5-7 achievements)
    - `ShipLift Goals` - Map achievements to your professional goals
    - `ShipLift Standup` - Prepare standup update
    - `ShipLift 1:1` - Prepare manager 1:1 talking points
+   - `ShipLift CV` - Turn your engineering history into CV-ready bullets
 
 ### Example Usage
 
@@ -27,6 +28,10 @@ ShipLift Goals
 ShipLift Standup 2-weeks
 
 ShipLift 1:1 3-months
+
+ShipLift CV
+
+ShipLift CV Senior
 ```
 
 ---
@@ -224,6 +229,50 @@ Prepare comprehensive talking points for a manager 1:1.
 - Interested in [domain] deeper dive?
 ```
 
+### ShipLift CV
+
+Answers: **What did I actually build and accomplish at this company?**
+
+ShipLift can analyze your engineering history and turn meaningful work into evidence-based CV bullets. Unlike the other commands, it looks across months or years rather than a single quarter. It:
+
+- groups related commits into engineering stories
+- identifies your most meaningful engineering contributions
+- extracts measurable evidence (never confusing test count with coverage)
+- highlights technical impact without inventing business impact
+- avoids invented claims about leadership, ownership, or performance
+- produces 5–8 CV-ready bullets, or fewer when evidence doesn't support more
+
+Supports time scoping (`ShipLift CV 2026`, `ShipLift CV Q1 2026`, `ShipLift CV last 2 years`) and role-focused emphasis (`ShipLift CV Senior`, `ShipLift CV Lead`), which change what's emphasized, never what's invented.
+
+**Example:**
+
+```
+ShipLift CV
+```
+
+```
+# 📄 CV Evidence
+
+## Frontend Engineer — shiplift-web
+
+### Strongest Contributions
+
+- Strengthened frontend regression protection by expanding the
+  automated test suite by 35% (120 → 162 tests) and improving
+  coverage of critical validation and edge-case scenarios.
+- Simplified shared frontend architecture by consolidating
+  reusable components and reducing duplicated implementation
+  across multiple product flows.
+
+### Technical Highlights
+
+- React / TypeScript
+- Testing / Quality
+- CI/CD
+```
+
+See [references/career-evidence-engine.md](references/career-evidence-engine.md) for the full aggregation, evidence-strength, and anti-BS rules.
+
 ---
 
 ## Architecture
@@ -244,7 +293,8 @@ shiplift/
 │   ├── anti-bs-rules.md              (Mandatory guardrails)
 │   ├── metrics.md                    (Metric calculation)
 │   ├── output-templates.md           (Output formatting)
-│   └── goals-engine.md               (SMART goals, mapping, progress)
+│   ├── goals-engine.md               (SMART goals, mapping, progress)
+│   └── career-evidence-engine.md     (CV aggregation, evidence strength, role modes)
 └── scripts/
     └── git-analysis.sh               (Helper script)
 ```
@@ -326,7 +376,10 @@ Specification for each of the four commands.
 #### 8. Goals Engine
 Rules for SMART goal validation, achievement-to-goal mapping, evidence, progress, and gaps behind `ShipLift Goals`.
 
-#### 8. Output Templates
+#### 9. Career Evidence Engine
+Rules for aggregating achievements across months/years into engineering stories, rating evidence strength, and role-focused emphasis (`Senior` / `Lead`) behind `ShipLift CV`.
+
+#### 10. Output Templates
 Templates and examples for generating achievement text.
 
 **Includes:**
@@ -625,6 +678,8 @@ See `VALIDATION.md` for full test suite.
 | anti-bs-rules.md | Mandatory guardrails |
 | metrics.md | Metric calculations |
 | output-templates.md | Output formatting |
+| goals-engine.md | SMART goals, mapping, progress |
+| career-evidence-engine.md | CV aggregation, evidence strength, role modes |
 | git-analysis.sh | Repository snapshot helper |
 
 ---

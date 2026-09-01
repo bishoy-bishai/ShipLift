@@ -365,6 +365,90 @@ Add a current coverage baseline and target, plus a deadline, so progress can be 
 
 ---
 
+## Command: ShipLift CV
+
+### Purpose
+
+Analyze the user's broader engineering history and convert it into evidence-backed, CV-ready contribution bullets. Answers: **What did I actually build and accomplish at this company?**
+
+### Input
+
+One of:
+
+```
+ShipLift CV
+ShipLift CV 2026
+ShipLift CV Q1 2026
+ShipLift CV last 2 years
+ShipLift CV <company>
+ShipLift CV Senior
+ShipLift CV Lead
+```
+
+- With no time period, use the broadest useful repository history (not just the current quarter).
+- A year, quarter, or relative range scopes the analysis to that period.
+- A company/project name scopes analysis to that project context if detectable.
+- `Senior` / `Lead` change emphasis only — see [Career Evidence Engine](career-evidence-engine.md) §13.
+
+### Output
+
+**5–8 strongest contributions** (fewer if evidence doesn't support that many), each a CV-ready bullet, grouped under a "Strongest Contributions" section, plus a "Technical Highlights" summary and optional evidence trace.
+
+### Process
+
+1. **Run** the standard Git Intelligence / Evidence Matrix / Achievement Engine pipeline over the requested time range (reusing the Quarter pipeline, not reimplementing it)
+2. **Aggregate** achievements across time into higher-level engineering stories (see [Career Evidence Engine](career-evidence-engine.md) §4)
+3. **Rate** each candidate story's evidence strength (Strong / Medium / Weak)
+4. **Filter** out Weak-evidence stories from the default output
+5. **Rank** remaining stories by impact, evidence strength, complexity, scope, ownership, measurability, relevance, uniqueness
+6. **Select** the top 5–8
+7. **Generate** CV bullets (Action + Technical Context + Outcome)
+8. **Apply** role-mode emphasis if `Senior` or `Lead` was requested
+9. **Validate** against Anti-BS Rules and the CV-specific checklist
+10. **Output** in the CV Evidence format
+
+### Important Constraints
+
+**Do NOT:**
+- generate one bullet per commit
+- confuse test count with test coverage
+- convert technical impact into business impact
+- invent leadership, ownership, or team size
+- invent percentages, performance numbers, or business outcomes without evidence
+- pad the output with weak bullets to hit 5–8
+
+### Example Output
+
+```
+# 📄 CV Evidence
+
+## Frontend Engineer — shiplift-web
+
+### Strongest Contributions
+
+- Strengthened frontend regression protection by expanding the
+  automated test suite by 35% (120 → 162 tests) and improving
+  coverage of critical validation and edge-case scenarios.
+- Simplified shared frontend architecture by consolidating
+  reusable components and reducing duplicated implementation
+  across multiple product flows.
+- Improved frontend performance by reducing bundle size by 12%
+  and initial load time by 34% through code-splitting and lazy
+  loading.
+
+### Technical Highlights
+
+- React / TypeScript
+- Testing / Quality
+- CI/CD
+```
+
+### Validation
+
+See [Career Evidence Engine](career-evidence-engine.md) §19 for the full checklist.
+
+---
+
 ## Command Variations
 
 ### Variations by Time Period
@@ -390,6 +474,17 @@ ShipLift Standup 3-days
 ShipLift 1:1 (default: 1 month)
 ShipLift 1:1 3-months
 ShipLift 1:1 since-last-1:1
+```
+
+**CV:**
+```
+ShipLift CV (default: broadest useful repository history)
+ShipLift CV 2026
+ShipLift CV Q1 2026
+ShipLift CV last 2 years
+ShipLift CV <company>
+ShipLift CV Senior
+ShipLift CV Lead
 ```
 
 ### Variations by Branch/Project

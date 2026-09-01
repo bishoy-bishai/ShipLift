@@ -113,6 +113,38 @@ Full rules: [Goals Engine](references/goals-engine.md)
 
 ---
 
+### ShipLift CV
+
+Answers: **What did I actually build and accomplish at this company?**
+
+Analyzes the user's broader engineering history (not just the current quarter) and turns it into evidence-backed, CV-ready contribution bullets. Reuses the same Git Intelligence / Evidence Matrix / Achievement Engine pipeline as `ShipLift Quarter`, then aggregates achievements across time into higher-level engineering stories.
+
+```
+Repository
+      ↓
+Git History (months / years)
+      ↓
+Achievements (via Quarter pipeline, reused)
+      ↓
+Career Evidence Engine
+      ↓
+5–8 Strongest Contributions
+      ↓
+CV Bullets
+```
+
+Supports time scoping (`ShipLift CV 2026`, `ShipLift CV Q1 2026`, `ShipLift CV last 2 years`) and role-focused emphasis (`ShipLift CV Senior`, `ShipLift CV Lead`) — role modes change emphasis only, never invent experience.
+
+**Do not invent:**
+- business impact, revenue, or customer numbers
+- leadership, ownership, or team size without evidence
+- percentages or performance numbers without a real before/after metric
+- business impact from technical metrics
+
+Full rules: [Career Evidence Engine](references/career-evidence-engine.md)
+
+---
+
 ## Core Philosophy
 
 The most important principle in ShipLift:
@@ -213,12 +245,13 @@ See detailed documentation in the `references/` folder:
 - [Commands](references/commands.md) — Detailed command specifications
 - [Output Templates](references/output-templates.md) — Command output formats
 - [Goals Engine](references/goals-engine.md) — SMART goals, achievement mapping, progress, and gaps for `ShipLift Goals`
+- [Career Evidence Engine](references/career-evidence-engine.md) — Career aggregation, evidence strength, and role modes for `ShipLift CV`
 
 ---
 
 ## How to Use ShipLift in a Coding Agent
 
-1. **Invoke** the skill with a command: `ShipLift Quarter`, `ShipLift Standup`, `ShipLift 1:1`, or `ShipLift Goals`
+1. **Invoke** the skill with a command: `ShipLift Quarter`, `ShipLift Standup`, `ShipLift 1:1`, `ShipLift Goals`, or `ShipLift CV`
 2. **Analyze** the repository using the Git Intelligence rules
 3. **Build** an evidence matrix of changes
 4. **Group** related work using clustering rules
@@ -255,6 +288,11 @@ When you receive a ShipLift command, follow this process:
 - Parse time period (default: 1 month)
 - Set start date (e.g., 1-month-ago)
 - Set end date (now)
+
+**ShipLift CV:**
+- Default: broadest useful repository history (not just the current quarter)
+- Or parse specified period (year, quarter, "last N years") or company/project scope
+- Note role mode if specified (`Senior` / `Lead`) — affects emphasis only
 
 ### 3. Gather Repository Evidence
 
@@ -331,6 +369,8 @@ Score each achievement on 7 dimensions (0-10 scale):
 **Standup output:** Sort by recency and status (Done/Next/Blockers)
 
 **1:1 output:** Use highest-scoring achievements plus learning/growth
+
+**CV output:** Aggregate achievements across the full period into engineering stories (see [Career Evidence Engine](references/career-evidence-engine.md) §4), rate evidence strength, filter out Weak evidence, then select top 5-8 by score
 
 ### 7. Generate Final Achievements
 
@@ -420,6 +460,8 @@ If uncertain about a claim, remove it or rephrase with evidence.
 
 **Goals output:** see [Output Templates](references/output-templates.md) and [Goals Engine](references/goals-engine.md) for the full `ShipLift Goals` process (SMART validation, achievement mapping, evidence, progress, gaps, recommendations).
 
+**CV output:** see [Output Templates](references/output-templates.md) and [Career Evidence Engine](references/career-evidence-engine.md) for the full `ShipLift CV` process (aggregation, evidence strength, role modes).
+
 ---
 
 ## Implementation Details
@@ -454,7 +496,8 @@ shiplift/
 │   ├── anti-bs-rules.md
 │   ├── metrics.md
 │   ├── output-templates.md
-│   └── goals-engine.md
+│   ├── goals-engine.md
+│   └── career-evidence-engine.md
 └── scripts/
     └── git-analysis.sh
 ```
@@ -487,4 +530,5 @@ ShipLift Quarter   — "What did I accomplish?"
 ShipLift Goals     — "How did my work move my goals?"
 ShipLift Standup   — "What do I say today?"
 ShipLift 1:1       — "What should I discuss with my manager?"
+ShipLift CV        — "What did I actually build and accomplish at this company?"
 ```
