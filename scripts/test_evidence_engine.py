@@ -142,6 +142,100 @@ class SignalTests(unittest.TestCase):
         self.assertEqual(signals, [])
 
 
+class GoalSignalTests(unittest.TestCase):
+    def test_repeated_theme_across_categories_is_detected(self):
+        items = [
+            ev("a", "Code Review", "Reviewed AI-generated code in the checkout flow", "2026-08-01", source="pulse"),
+            ev("b", "Problem Solving", "Fixed a bug in AI-generated code for checkout", "2026-08-05", source="pulse"),
+            ev("c", "Investigation", "Investigated AI-generated code quality issues", "2026-08-10", source="pulse"),
+        ]
+        clusters = engine.theme_clusters(items)
+        self.assertEqual(len(clusters), 1)
+        self.assertEqual(clusters[0]["occurrences"], 3)
+        self.assertIn("code", clusters[0]["theme_keywords"])
+
+    def test_unrelated_items_do_not_cluster(self):
+        items = [
+            ev("a", "Documentation", "Updated the onboarding guide", "2026-01-01"),
+            ev("b", "Investigation", "Investigated flaky Cypress tests", "2026-06-01"),
+            ev("c", "Planning", "Discussed roadmap priorities", "2026-07-01"),
+        ]
+        clusters = engine.theme_clusters(items)
+        self.assertEqual(clusters, [])
+
+    def test_single_mention_is_weak_signal(self):
+        items = [ev("a", "Initiative", "Started a testing initiative", "2026-08-01")]
+        confidence, _ = engine.goal_signal_confidence(items)
+        self.assertEqual(confidence, "Weak Signal")
+
+    def test_two_to_three_mentions_without_repo_evidence_is_emerging(self):
+        items = [
+            ev(str(i), "Code Review", f"Reviewed AI-generated code ({i})", f"2026-08-0{i}", source="pulse")
+            for i in range(1, 3)
+        ]
+        confidence, _ = engine.goal_signal_confidence(items)
+        self.assertEqual(confidence, "Emerging Signal")
+
+    def test_repeated_pulse_plus_repo_evidence_is_strong(self):
+        items = [
+            ev("a", "Code Review", "Reviewed AI-generated code", "2026-08-01", source="pulse"),
+            ev("b", "Problem Solving", "Fixed AI-generated code bug", "2026-08-02", source="pulse"),
+            ev("c", "Testing", "Added validation tests for AI-generated code",
+               "2026-08-03", source="git", metadata={"before": "no validation", "after": "validated"}),
+        ]
+        confidence, reasons = engine.goal_signal_confidence(items)
+        self.assertEqual(confidence, "Strong Goal Signal")
+        self.assertTrue(reasons)
+
+    def test_repeated_same_source_no_metric_is_not_strong(self):
+        # Repeated Pulse mentions alone (no repo evidence, single source) —
+        # per goals-engine.md §7, this must NOT count as a strong signal.
+        items = [
+            ev(str(i), "Mentoring", f"Mentored a junior engineer ({i})", f"2026-08-0{i}", source="pulse")
+            for i in range(1, 4)
+        ]
+        confidence, _ = engine.goal_signal_confidence(items)
+        self.assertNotEqual(confidence, "Strong Goal Signal")
+
+    def test_detect_goal_signals_end_to_end(self):
+        items = [
+            ev("a", "Code Review", "Reviewed AI-generated code", "2026-08-01", source="pulse"),
+            ev("b", "Problem Solving", "Fixed AI-generated code bug", "2026-08-02", source="pulse"),
+            ev("c", "Investigation", "Investigated AI-generated code failures", "2026-08-03", source="pulse"),
+        ]
+        signals = engine.detect_goal_signals(items)
+        self.assertEqual(len(signals), 1)
+        self.assertIn(signals[0]["confidence"], {"Weak Signal", "Emerging Signal", "Strong Goal Signal"})
+
+    def test_no_evidence_no_signal(self):
+        self.assertEqual(engine.detect_goal_signals([]), [])
+
+
+class GoalMatchingTests(unittest.TestCase):
+    def test_existing_goal_matches_supporting_evidence(self):
+        items = [
+            ev("a", "Testing", "Added automated tests for the checkout flow", "2026-08-01",
+               metadata={"before": "72% coverage", "after": "84% coverage"}),
+            ev("b", "Documentation", "Wrote onboarding docs", "2026-01-01"),
+        ]
+        matches = engine.match_goal("Improve frontend code quality through automated testing", items)
+        ids = [m["id"] for m in matches]
+        self.assertIn("a", ids)
+
+    def test_unrelated_evidence_does_not_match(self):
+        items = [ev("a", "Documentation", "Wrote onboarding docs for new hires", "2026-01-01")]
+        matches = engine.match_goal("Improve payment processing reliability", items)
+        self.assertEqual(matches, [])
+
+    def test_matches_are_ranked_by_overlap(self):
+        items = [
+            ev("a", "Testing", "Added automated regression tests for the checkout flow", "2026-08-01"),
+            ev("b", "Documentation", "Wrote a short note about tests", "2026-08-02"),
+        ]
+        matches = engine.match_goal("Improve automated regression testing for checkout", items)
+        self.assertEqual(matches[0]["id"], "a")
+
+
 class BlindSpotTests(unittest.TestCase):
     def test_missing_category_is_limited_evidence_not_a_judgment(self):
         items = [ev("a", "Feature Delivery", "Shipped settings page", "2026-08-01")]

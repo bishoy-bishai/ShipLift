@@ -119,6 +119,33 @@ else
     echo "PASS: blind-spots output avoids judgmental language"
 fi
 
+echo "== Test: goal-signals detects a recurring theme across categories =="
+store add --company acme --category "Code Review" \
+    --description "Reviewed AI-generated code in checkout" --work-date "2026-08-10" --source pulse > /dev/null
+store add --company acme --category "Problem Solving" \
+    --description "Fixed a bug in AI-generated code for checkout" --work-date "2026-08-11" --source pulse > /dev/null
+store add --company acme --category "Investigation" \
+    --description "Investigated AI-generated code quality issues" --work-date "2026-08-12" --source pulse > /dev/null
+out=$(engine goal-signals --company acme)
+assert_contains "$out" '"goal_signals"' "goal-signals returns a goal_signals array"
+assert_contains "$out" "AI-generated" "goal-signals surfaces the AI-generated-code theme evidence"
+
+echo "== Test: match-goal finds supporting evidence for an existing goal =="
+out=$(engine match-goal --company acme --goal "Improve AI-generated code quality")
+assert_contains "$out" '"matches"' "match-goal returns a matches array"
+count=$(echo "$out" | python3 -c "import json,sys; print(len(json.load(sys.stdin)['matches']))")
+if [ "$count" -ge 1 ]; then
+    PASS=$((PASS + 1))
+    echo "PASS: match-goal finds evidence supporting the existing goal"
+else
+    FAIL=$((FAIL + 1))
+    echo "FAIL: match-goal found no supporting evidence"
+fi
+
+echo "== Test: match-goal returns nothing for an unrelated goal =="
+out=$(engine match-goal --company acme --goal "Reduce cloud infrastructure spend")
+assert_contains "$out" '"matches": []' "match-goal returns no matches for an unrelated goal"
+
 echo "== Test: open-threads flags the unresolved investigation, resolved one is excluded =="
 resolved_out=$(store add --company acme --category "Investigation" \
     --description "Investigated slow CI builds" --work-date "2026-08-01" --source pulse)

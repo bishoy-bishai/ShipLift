@@ -14,6 +14,8 @@ existing commands) can call instead of re-implementing this logic ad hoc:
     - blind spot detection      (references/core/blind-spots.md)
     - anti-inflation linting    (references/core/anti-inflation.md)
     - open-thread detection     (Quarter closure, see references/commands.md §21)
+    - goal signal detection     (Reverse Achievement -> Goal Mapping, references/goals-engine.md §18-19)
+    - goal matching             (existing-goal evidence linking, references/goals-engine.md §17)
 
 This module reads/writes through pulse_store's load/save so there is a
 single storage implementation (see references/core/evidence-engine.md §7
@@ -267,6 +269,178 @@ def cmd_signals(args):
 
 
 # ---------------------------------------------------------------------------
+# Goal Signals (Reverse Achievement -> Goal Mapping)
+# ---------------------------------------------------------------------------
+#
+# detect_signals() above groups by an evidence item's own *category*
+# ("3+ Code Review items"). A goal signal is broader: it clusters evidence
+# by shared *theme* (keyword overlap) regardless of category, so a pattern
+# like "reviewed AI-generated code" / "fixed AI-generated bug" / "improved
+# AI-generated code quality" — which may land in different categories — is
+# still recognized as one recurring theme. See references/goals-engine.md
+# §16 "Pulse-Derived Goal Signals".
+
+THEME_MIN_SHARED_KEYWORDS = 2
+THEME_MIN_CLUSTER_SIZE = 2
+
+
+def theme_clusters(items, min_shared_keywords=THEME_MIN_SHARED_KEYWORDS,
+                    min_cluster_size=THEME_MIN_CLUSTER_SIZE):
+    """Cluster evidence (within the same company) by shared description
+    keywords, independent of category. Returns clusters of size >=
+    min_cluster_size, largest first. Never merges evidence from different
+    companies, and never invents a theme from a single item.
+    """
+    kw_cache = {item["id"]: keywords(item.get("description", "")) for item in items}
+    parent = {item["id"]: item["id"] for item in items}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    for i, item_a in enumerate(items):
+        for item_b in items[i + 1:]:
+            if item_a.get("company") != item_b.get("company"):
+                continue
+            overlap = kw_cache[item_a["id"]] & kw_cache[item_b["id"]]
+            if len(overlap) >= min_shared_keywords:
+                union(item_a["id"], item_b["id"])
+
+    groups = {}
+    for item in items:
+        groups.setdefault(find(item["id"]), []).append(item)
+
+    clusters = []
+    for group in groups.values():
+        if len(group) < min_cluster_size:
+            continue
+        freq = {}
+        for item in group:
+            for kw in kw_cache[item["id"]]:
+                freq[kw] = freq.get(kw, 0) + 1
+        shared_threshold = max(2, len(group) // 2)
+        theme_keywords = sorted(
+            (kw for kw, count in freq.items() if count >= shared_threshold),
+            key=lambda kw: -freq[kw],
+        )[:6]
+        if not theme_keywords:
+            continue
+        sources = sorted({item.get("source") for item in group})
+        categories = sorted({item.get("category") for item in group if item.get("category")})
+        dates = sorted(item.get("date", "") for item in group if item.get("date"))
+        clusters.append({
+            "theme_keywords": theme_keywords,
+            "occurrences": len(group),
+            "sources": sources,
+            "categories": categories,
+            "first_date": dates[0] if dates else None,
+            "last_date": dates[-1] if dates else None,
+            "item_ids": [item["id"] for item in group],
+            "descriptions": [item["description"] for item in group],
+        })
+
+    clusters.sort(key=lambda c: -c["occurrences"])
+    return clusters
+
+
+def goal_signal_confidence(group):
+    """Confidence for a candidate goal signal, following the repetition
+    thresholds in references/goals-engine.md §19:
+
+        1 mention                              -> Weak Signal
+        2-3 related mentions                   -> Emerging Signal
+        repeated mentions + multi-source/metric -> Strong Goal Signal
+
+    Reuses evidence_strength's own building blocks (has_measurable_metric,
+    source counting) rather than introducing a second scoring system.
+    """
+    n = len(group)
+    if n <= 1:
+        return "Weak Signal", ["a single mention is not enough evidence for a goal"]
+
+    sources = {item.get("source") for item in group}
+    measurable = any(has_measurable_metric(item) for item in group)
+    multi_source = len(sources) >= 2
+
+    if n >= 3 and (multi_source or measurable):
+        reasons = [f"{n} related items"]
+        if multi_source:
+            reasons.append(f"backed by multiple evidence sources ({', '.join(sorted(sources))})")
+        if measurable:
+            reasons.append("has a measurable before/after value")
+        return "Strong Goal Signal", reasons
+
+    return "Emerging Signal", [
+        f"{n} related item(s) — not yet repeated with supporting repository evidence"
+    ]
+
+
+def detect_goal_signals(items):
+    """Full goal-signal detection: theme clusters + confidence rating.
+
+    This is descriptive raw material for the agent to phrase as a
+    Suggested Goal (see references/goals-engine.md §19) — it never invents
+    goal wording itself.
+    """
+    signals = []
+    for cluster in theme_clusters(items):
+        confidence, reasons = goal_signal_confidence(
+            [i for i in items if i["id"] in cluster["item_ids"]]
+        )
+        signals.append({**cluster, "confidence": confidence, "reasons": reasons})
+    return signals
+
+
+def cmd_goal_signals(args):
+    items = store.load_evidence(args)
+    if args.quarter:
+        start, end = store.quarter_bounds(args.quarter)
+        items = [i for i in items if start <= i.get("date", "") <= end]
+    print(json.dumps({"goal_signals": detect_goal_signals(items)}, indent=2))
+
+
+# ---------------------------------------------------------------------------
+# Goal Matching (existing goals first)
+# ---------------------------------------------------------------------------
+
+def match_goal(goal_text, items):
+    """Score recorded evidence against an existing goal's own wording, so
+    `ShipLift Goals` can check for supporting evidence before ever
+    suggesting a new goal. Keyword overlap only — never a semantic guess.
+    """
+    goal_keywords = keywords(goal_text)
+    scored = []
+    for item in items:
+        item_keywords = keywords(f"{item.get('description', '')} {item.get('category', '')}")
+        overlap = goal_keywords & item_keywords
+        if overlap:
+            scored.append({
+                "id": item["id"],
+                "description": item.get("description"),
+                "category": item.get("category"),
+                "source": item.get("source"),
+                "date": item.get("date"),
+                "overlap": sorted(overlap),
+                "score": len(overlap),
+            })
+    scored.sort(key=lambda s: -s["score"])
+    return scored
+
+
+def cmd_match_goal(args):
+    items = store.load_evidence(args)
+    matches = match_goal(args.goal, items)
+    print(json.dumps({"goal": args.goal, "matches": matches}, indent=2))
+
+
+# ---------------------------------------------------------------------------
 # Blind Spots
 # ---------------------------------------------------------------------------
 
@@ -475,6 +649,16 @@ def build_parser():
     sp.add_argument("--company", required=True)
     sp.add_argument("--quarter")
     sp.set_defaults(func=cmd_signals)
+
+    sp = sub.add_parser("goal-signals")
+    sp.add_argument("--company", required=True)
+    sp.add_argument("--quarter")
+    sp.set_defaults(func=cmd_goal_signals)
+
+    sp = sub.add_parser("match-goal")
+    sp.add_argument("--company", required=True)
+    sp.add_argument("--goal", required=True)
+    sp.set_defaults(func=cmd_match_goal)
 
     sp = sub.add_parser("blind-spots")
     sp.add_argument("--company", required=True)

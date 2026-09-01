@@ -174,7 +174,7 @@ Avoid: unnecessary frameworks, databases, complex scoring systems, black-box rat
 | `ShipLift Quarter` | Combining Git + Pulse evidence before clustering; open-thread follow-ups (§ "Quarter Closure" in [commands.md](../commands.md)) |
 | `ShipLift Standup` | Blending recent Pulse evidence into `Done/Next/Blockers` |
 | `ShipLift 1:1` | Surfacing signals, blind spots, and Pulse evidence as talking points |
-| `ShipLift Goals` | Using Git + Pulse evidence together as supporting evidence (never proof of completion) |
+| `ShipLift Goals` | Matching Git + Pulse evidence against existing goals (`match-goal`); detecting Pulse-derived goal signals for Reverse Achievement → Goal Mapping (`goal-signals`) — see [Goals Engine §16-22](../goals-engine.md) |
 | `ShipLift CV` | Using Strong/Moderate evidence (from either source) to support CV bullets |
 | `ShipLift Pulse` | Writing evidence through the EvidenceStore; duplicate detection |
 

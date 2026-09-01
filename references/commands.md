@@ -293,7 +293,7 @@ Only report what can be proven.
 
 ### Purpose
 
-Evaluate whether the user's professional goals are SMART, map their engineering achievements to those goals, and report evidence, progress, and gaps.
+Evaluate whether the user's professional goals are SMART, map their engineering achievements to those goals, and report evidence, progress, and gaps — **in both directions**. Goals can be validated against evidence (forward), and evidence (achievements + Pulse Memory + repository evidence) can be analyzed to suggest goals the work already indicates (reverse). See [Goals Engine](goals-engine.md) §16-22 for the full reverse-mapping and Pulse-integration rules.
 
 ### Input
 
@@ -304,24 +304,35 @@ One of:
 - A single goal
 - No input (ShipLift proposes Suggested Goals from recent achievements)
 
+In every mode, Pulse Memory (`pulse-store.sh`) for the relevant period is read alongside repository evidence — never Git alone when Pulse evidence is available, and never Pulse alone when repository evidence is available (Goals Engine §16).
+
 ### Output
 
-Per goal: SMART score, progress, alignment, supporting achievements, evidence, gaps, and a recommendation. Finished with an "Overall Goal Review" summary.
+Up to four sections (Goals Engine §22) — only include a section with real content:
+
+1. **Existing Goal Progress** — for each existing goal with supporting evidence: SMART score, progress, alignment, supporting achievements, Pulse evidence, code evidence, gaps, and a recommendation.
+2. **Suggested Goals** — new goals detected via reverse achievement mapping or Pulse-derived goal signals, strong enough to propose (clearly labeled as suggestions).
+3. **Goal Signals** — emerging patterns not yet strong enough to suggest as a goal.
+4. **Evidence Gaps** — what's missing to make a goal more measurable.
+
+Finished with an "Overall Goal Review" summary when more than one goal is discussed.
 
 See [Output Templates](output-templates.md) for the exact format.
 
 ### Process
 
 1. **Parse** input mode (goals only / goals+achievements / single goal / none)
-2. **If no achievements provided**, reuse the most recent `ShipLift Quarter` output, or run the Quarter pipeline (Git + Pulse evidence via the [Evidence Engine](core/evidence-engine.md)) to generate candidates
-3. **If no goals provided**, identify recurring themes across achievements and produce 2-4 labeled **Suggested Goals**, then stop and ask for confirmation
-4. **Validate** each goal against SMART (Specific, Measurable, Achievable, Relevant, Time-bound), using `✓ / ✗ / ?`
-5. **Suggest** an improved goal version when useful (using placeholders for any missing baseline/target, never invented numbers)
-6. **Map** each achievement to the goal(s) it supports (Direct / Strong Support / Supporting / Weak / No Clear Alignment)
-7. **Collect** evidence per goal (Direct / Supporting / Missing)
-8. **Evaluate** progress (Not Started / Early Progress / On Track / Strong Progress / At Risk / Achieved / Unknown) — only calculate a numeric percentage when baseline, target, and current value all exist for the same metric
-9. **Assess** goal health (Healthy / Needs Attention / At Risk / Unknown) and identify gaps
-10. **Output** in the Goals Review format, finishing with the Overall Goal Review summary
+2. **Gather** evidence: repository evidence and Pulse Memory for the relevant period, via the [Evidence Engine](core/evidence-engine.md)
+3. **Check existing goals first** — for each existing goal, run `evidence-engine.sh match-goal` to find supporting evidence before considering anything new (Goals Engine §17)
+4. **If no achievements provided**, reuse the most recent `ShipLift Quarter` output, or run the Quarter pipeline (Git + Pulse evidence) to generate candidates
+5. **If no goals provided (or to supplement existing ones)**, run **Reverse Achievement → Goal Mapping**: group achievements by intent/theme and run `evidence-engine.sh goal-signals` over Pulse Memory to surface Pulse-derived themes, then produce 2-4 labeled **Suggested Goals** (fewer, stronger goals — not one per achievement), and stop to ask for confirmation
+6. **Validate** each goal (existing or suggested) against SMART (Specific, Measurable, Achievable, Relevant, Time-bound), using `✓ / ✗ / ?`
+7. **Suggest** an improved goal version when useful (using placeholders for any missing baseline/target, never invented numbers)
+8. **Map** each achievement to the goal(s) it supports (Direct / Strong Support / Supporting / Weak / No Clear Alignment)
+9. **Collect** evidence per goal (Direct / Supporting / Missing), from both Git and Pulse
+10. **Evaluate** progress (Not Started / Early Progress / On Track / Strong Progress / At Risk / Achieved / Unknown) — only calculate a numeric percentage when baseline, target, and current value all exist for the same metric
+11. **Assess** goal health (Healthy / Needs Attention / At Risk / Unknown) and identify gaps
+12. **Output** in the four-section Goals Review format, finishing with the Overall Goal Review summary
 
 Full rules: [Goals Engine](goals-engine.md)
 
@@ -332,6 +343,12 @@ Full rules: [Goals Engine](goals-engine.md)
 - progress percentages without a valid baseline/target/current triple
 - goal completion or achievement from mere existence of related work
 - business outcomes from technical metrics (e.g. test count ≠ coverage)
+- a goal just because it "sounds good for a software engineer" (Goals Engine §20) — e.g. "become a technical leader" without evidence
+- a strong goal signal from a single Pulse mention, or from repeated Pulse mentions with no repository evidence/metric (Goals Engine §19)
+
+**Do NOT:**
+- convert each achievement into its own goal (prefer fewer, stronger, consolidated goals — Goals Engine §18)
+- create a duplicate goal when an existing goal already covers the evidence
 
 ### Example Output
 
@@ -385,6 +402,61 @@ Add a current coverage baseline and target, plus a deadline, so progress can be 
 - Capture a coverage baseline to make this goal measurable
 ```
 
+### Reverse-Mapping / Pulse-Derived Example
+
+```
+## Suggested Goals
+
+### Improve AI-Generated Code Quality
+
+Improve the quality, maintainability, and reliability of AI-generated
+code through stronger review, validation, testing, and engineering
+standards.
+
+Why this goal was detected:
+Repeated Pulse evidence shows a recurring focus on reviewing,
+correcting, and improving AI-generated code.
+
+Supporting Achievements:
+- (none yet — this signal is currently Pulse-only)
+
+Pulse Evidence:
+- Reviewed AI-generated code
+- Fixed a bug in AI-generated code
+- Investigated AI-generated code quality issues
+
+Code Evidence:
+- None yet
+
+Evidence Strength: Emerging Signal
+Confidence: Medium
+Source: Pulse-derived Goal Signal
+
+SMART Check:
+Specific       ✓
+Measurable     ✗ (no quality metric captured yet)
+Achievable     ?
+Relevant       ✓
+Time-bound     ✗
+
+Missing Information:
+- A measurable quality metric (e.g. defect rate, review turnaround)
+- A deadline
+
+## Goal Signals
+
+### Emerging Goal Signal: Improve AI-generated code quality
+
+Signal source: Pulse Memory
+Supporting pattern: Repeated AI-code review and improvement activity (3 items).
+Confidence: Medium
+
+## Evidence Gaps
+
+- You have evidence of improving AI-generated code, but no measurable
+  quality metric exists yet.
+```
+
 ### Validation
 
 - [ ] Every goal has a SMART score with honest `?` where evidence is missing
@@ -392,6 +464,11 @@ Add a current coverage baseline and target, plus a deadline, so progress can be 
 - [ ] Progress percentage only shown with baseline/target/current all present
 - [ ] No invented baselines, targets, deadlines, or business outcomes
 - [ ] Suggested Goals (when generated) are clearly labeled and require confirmation
+- [ ] Existing goals are checked for supporting evidence (`match-goal`) before any new goal is suggested
+- [ ] Achievements are grouped by intent into fewer, stronger goals — not one goal per achievement
+- [ ] Pulse-derived goal signals are labeled with their source and confidence, never presented as certain
+- [ ] A single or unsupported Pulse mention never becomes a Strong Goal Signal
+- [ ] "No strong goal signal detected" is used when evidence is insufficient, rather than inventing a plausible-sounding goal
 
 ---
 

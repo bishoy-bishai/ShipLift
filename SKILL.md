@@ -118,21 +118,23 @@ Topics to Discuss
 
 ### ShipLift Goals
 
-Answers: **How do my achievements support my professional goals, and how much progress can I prove?**
+Answers: **How do my achievements support my professional goals, and how much progress can I prove?** — and, in reverse: **What goals does my work already indicate?**
 
-Builds on `ShipLift Quarter` achievements (reused, not regenerated) and evaluates goals for SMART quality, maps achievements to goals, gathers evidence, and reports progress and gaps.
+Builds on `ShipLift Quarter` achievements (reused, not regenerated) and Pulse Memory (a first-class evidence source here too, not just for Standup). Evaluates goals for SMART quality, maps achievements to goals, gathers evidence from Git and Pulse together, and reports progress and gaps.
 
 ```
-ShipLift Quarter
-      ↓
-5–7 Achievements
-      ↓
-ShipLift Goals
-      ↓
-SMART Validation → Achievement → Goal Mapping → Evidence → Progress → Gaps → Recommendations
+ShipLift Quarter                    Pulse Memory
+      ↓                                  ↓
+5–7 Achievements ──────────┬────────────┘
+                            ↓
+                     ShipLift Goals
+                            ↓
+  Existing-Goal Matching → Reverse Mapping → SMART Validation
+                            ↓
+        Evidence → Progress → Gaps → Recommendations
 ```
 
-Supports goals-only, goals+achievements, a single goal, or no goals at all (in which case ShipLift proposes **Suggested Goals** from recurring achievement themes and asks for confirmation — it never invents official goals on the user's behalf).
+Supports goals-only, goals+achievements, a single goal, or no goals at all (in which case ShipLift checks existing goals for supporting evidence first, then runs **Reverse Achievement → Goal Mapping** and Pulse-derived goal-signal detection to propose **Suggested Goals** — grouped into a few strong goals, not one per achievement — and asks for confirmation; it never invents official goals on the user's behalf).
 
 **Do not invent:**
 - baselines, targets, or deadlines

@@ -559,6 +559,184 @@ When information is unavailable, say `Unknown` or `More evidence needed` — nev
 
 ---
 
+## 16. Evidence Sources: Git + Pulse Together
+
+`ShipLift Goals` must use both evidence sources, combined through the shared [Evidence Engine](core/evidence-engine.md) — never analyzed in isolation when the other is available:
+
+```
+Git Evidence
+     +
+Pulse Memory
+     ↓
+Evidence Engine
+     ↓
+Pattern Detection
+     ↓
+Goal Signals / Goal Mapping
+```
+
+Pulse Memory (the same EvidenceStore behind `ShipLift Pulse`, read via `pulse-store.sh`) is a first-class evidence source for Goals — not just for Standup. It contributes to goal discovery, existing-goal evidence, and progress the same way Git evidence does.
+
+```
+Existing goal:  Improve frontend code quality.
+
+Evidence:
+- Git:   Added automated tests, +35% coverage
+- Git:   Added ESLint architectural rules
+- Pulse: Reviewed 3 PRs, found a validation issue
+- Pulse: Helped a teammate debug a testing pattern
+```
+
+Both sources go through the same clustering, [evidence-strength](core/evidence-strength.md), and [anti-inflation](core/anti-inflation.md) rules — Pulse evidence gets no special treatment or extra credibility, and neither does Git.
+
+---
+
+## 17. Existing Goals First
+
+Before suggesting anything new, check whether recorded evidence already supports one of the user's existing goals. Use `evidence-engine.sh match-goal --company ID --goal "<goal text>"` — it scores recorded evidence (Git + Pulse) against the goal's own wording by keyword overlap, so relevant evidence surfaces without guessing at a semantic match.
+
+```
+Existing Goal → Evidence Engine match → Link Evidence → Estimate Progress
+```
+
+If matching evidence exists, attach it to the existing goal (§5, §6) — do not create a duplicate goal that says roughly the same thing.
+
+---
+
+## 18. Reverse Achievement → Goal Mapping
+
+`ShipLift Goals` must also work backwards: given achievements (from `ShipLift Quarter`) and Pulse Memory, what goal do they indicate?
+
+```
+Achievements + Pulse Memory + Repository Evidence
+                    ↓
+        Potential Goals
+```
+
+Do **not** convert each achievement into its own goal. Instead:
+
+```
+5 Achievements
+      ↓
+Group by intent
+      ↓
+Find recurring patterns
+      ↓
+Identify the common engineering objective
+      ↓
+Suggest 2-4 meaningful goals
+```
+
+Example:
+
+```
+Achievements:
+- Server-First Component Architecture
+- BFF / API Client Modernization
+- Reliability & Correctness Fixes
+- Test Coverage Improvements
+
+→ One goal, not four:
+  Improve frontend architecture, reliability, and maintainability.
+```
+
+Prefer fewer, stronger goals over one goal per achievement — only split into separate goals when the evidence clearly indicates independent objectives (e.g. a testing-focused body of work and a completely unrelated incident-response body of work).
+
+This grouping is the agent's judgment call, using the same [Achievement Framework](achievement-framework.md) clustering logic already used elsewhere in ShipLift — it is not a second, parallel grouping system.
+
+---
+
+## 19. Pulse-Derived Goal Signals
+
+Some goals are visible only in Pulse Memory — Git never sees them. Use `evidence-engine.sh goal-signals --company ID` to detect recurring *themes* across evidence descriptions, independent of category (see [Signal Detection](core/signal-detection.md) for the category-based version; goal signals cluster by shared keywords instead, since a theme like "AI-generated code" can appear across Code Review, Investigation, and Problem Solving evidence alike).
+
+```
+Pulse:  Reviewed AI-generated code.
+Pulse:  Fixed issues in AI-generated implementation.
+Pulse:  Improved AI-generated code quality.
+Pulse:  Created better validation around AI-generated code.
+Pulse:  Helped teammates review AI-generated changes.
+
+→ Goal Signal: Improve AI-generated code quality.
+```
+
+When the agent turns a detected signal into a Suggested Goal, mark its source:
+
+```
+Source: Pulse-derived Goal Signal
+```
+
+when the signal is primarily Pulse evidence, or a combined source when Git evidence contributed too. The signal itself (`goal-signals` output: theme keywords, occurrences, sources, categories, item ids) is raw material — the agent still writes the actual goal wording; the engine never phrases a goal on its own.
+
+### Signal Confidence (repetition thresholds)
+
+Reusing [Evidence Strength](core/evidence-strength.md)'s building blocks (measurable metric, multi-source, repetition) rather than a second scoring system:
+
+```
+1 mention                                    → Weak Signal
+2-3 related mentions, single source, no metric → Emerging Signal
+3+ mentions AND (multiple sources OR a metric) → Strong Goal Signal
+```
+
+Never create a strong goal from one weak signal, and never call repeated Pulse mentions alone (no repository evidence, no metric) a Strong Goal Signal — that combination stays Emerging/Moderate until Git evidence or a real metric corroborates it.
+
+---
+
+## 20. Never Invent Goals
+
+Do not create goals just because they sound good for a software engineer. Forbidden without evidence:
+
+```
+Become a technical leader.
+Improve communication.
+Become better at mentoring.
+Increase business impact.
+Lead cross-functional initiatives.
+```
+
+If evidence is insufficient for a suggested-goal candidate:
+
+```
+No strong goal signal detected.
+```
+
+is a valid, complete result — not a failure to fix by lowering the bar.
+
+---
+
+## 21. Goal Hierarchy
+
+Do not confuse these levels — a goal must sit above an achievement, not restate a task:
+
+```
+Task              → Add ESLint rule
+Activity          → (the raw commit/PR/Pulse entry)
+Achievement       → Established architectural enforcement for Client Components
+Goal              → Improve frontend architecture and maintainability
+Career Direction  → Technical leadership / architecture (only with real evidence)
+```
+
+```
+Achievement: Added 18 regression tests.
+Goal:        Improve automated test coverage and regression protection.
+NOT a goal:  Add 18 regression tests.        (that's the achievement, restated)
+```
+
+---
+
+## 22. Output Structure
+
+`ShipLift Goals` produces up to four sections — only include a section when it has real content (e.g. skip "Suggested Goals" entirely if none clear the evidence bar):
+
+1. **Existing Goal Progress** — for each existing goal with supporting evidence: progress, supporting achievements, Pulse evidence, code evidence, gaps (uses §17 matching plus the existing §7-§9 progress/health/gap rules).
+2. **Suggested Goals** — new goals detected via reverse mapping (§18) or Pulse-derived signals (§19) strong enough to propose, each with: goal title, a SMART-checked goal statement, why it was detected, supporting achievements/Pulse evidence/code evidence, evidence strength, confidence, and missing information. Always labeled as suggestions requiring confirmation (§2 Mode D).
+3. **Goal Signals** — emerging patterns not yet strong enough to suggest as a goal (§19's Emerging Signal tier), shown so the user can see what ShipLift is starting to notice.
+4. **Evidence Gaps** — what's missing to make a goal (existing or suggested) more measurable, e.g. "strong evidence of improving AI-generated code, but no measurable quality metric yet."
+
+See [Output Templates](output-templates.md) for the exact formatting of each section.
+
+---
+
 ## The Principle
 
 > A good goal is not a sentence that sounds ambitious. It is a measurable outcome that can be proven.

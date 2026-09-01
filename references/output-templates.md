@@ -123,12 +123,16 @@ Add at the top:
 
 ## Goals Review Template
 
-### Full Structure
+`ShipLift Goals` output has up to four sections (see [Goals Engine §22](goals-engine.md)) — include only the sections that have real content.
+
+### 1. Existing Goal Progress
 
 ```
 # 🎯 Goals Review
 
-## Goal 1 — [Goal]
+## 1. Existing Goal Progress
+
+### Goal 1 — [Goal]
 
 ### SMART Score
 X/5
@@ -149,7 +153,10 @@ Time-bound     ✓ / ✗ / ?
 - [Achievement A]
 - [Achievement B]
 
-### Evidence
+### Pulse Evidence
+- [Pulse-recorded fact supporting this goal]
+
+### Code Evidence
 - ✓ [Direct or supporting evidence]
 - ⚠ [Missing evidence]
 
@@ -160,7 +167,79 @@ Time-bound     ✓ / ✗ / ?
 [Short, useful, evidence-grounded recommendation]
 ```
 
-Repeat the `## Goal N` block for each goal, then finish with:
+Repeat the `### Goal N` block for each existing goal that has supporting evidence (found via `evidence-engine.sh match-goal`).
+
+### 2. Suggested Goals
+
+Only for new goals detected through Reverse Achievement → Goal Mapping or Pulse-derived goal signals (Goals Engine §18-19), strong enough to propose:
+
+```
+## 2. Suggested Goals
+
+### [Goal Title]
+
+[SMART-checked goal statement]
+
+Why this goal was detected:
+[Recurring pattern across achievements and/or Pulse evidence]
+
+Supporting Achievements:
+- [Achievement A]
+- [Achievement B]
+
+Pulse Evidence:
+- [Pulse item]
+- [Pulse item]
+
+Code Evidence:
+- [Git-derived evidence, or "None yet"]
+
+Evidence Strength: [Strong Goal Signal / Emerging Signal / Weak Signal]
+Confidence: [High / Medium / Low]
+Source: [Pulse-derived Goal Signal / Repository-derived / Combined]
+
+SMART Check:
+Specific       ✓ / ✗ / ?
+Measurable     ✓ / ✗ / ? (state "Not currently available" if no metric exists)
+Achievable     ✓ / ✗ / ?
+Relevant       ✓ / ✗ / ?
+Time-bound     ✓ / ✗ / ? (state "Missing" if no deadline exists — never invent one)
+
+Missing Information:
+- [What's needed to strengthen this into a fully SMART goal]
+```
+
+If no candidate clears the evidence bar:
+
+```
+No strong goal signal detected.
+```
+
+### 3. Goal Signals
+
+Recurring patterns that are not yet strong enough to suggest as a goal (Emerging/Weak Signal tier):
+
+```
+## 3. Goal Signals
+
+### Emerging Goal Signal: [pattern description]
+
+Signal source: [Pulse Memory / Repository / Combined]
+Supporting pattern: [what's recurring, and how many items]
+Confidence: [Weak Signal / Emerging Signal]
+```
+
+### 4. Evidence Gaps
+
+```
+## 4. Evidence Gaps
+
+- [What's missing to make a goal (existing or suggested) more measurable]
+```
+
+### Overall Goal Review
+
+When more than one goal is discussed, finish with:
 
 ```
 ## Overall Goal Review
@@ -178,24 +257,6 @@ Repeat the `## Goal N` block for each goal, then finish with:
 - [Where to focus next, grounded in gaps above]
 ```
 
-### Suggested Goals Template (No Goals Provided)
-
-```
-Based on your recent work, I found [N] recurring themes:
-
-1. [Theme 1]
-2. [Theme 2]
-3. [Theme 3]
-
-Suggested Goals:
-
-1. [Suggested goal 1]
-2. [Suggested goal 2]
-3. [Suggested goal 3]
-
-These are suggestions, not confirmed goals.
-```
-
 ### Metadata
 
 Add at the top when useful:
@@ -203,6 +264,7 @@ Add at the top when useful:
 ```
 **Goals Analyzed:** [Number]
 **Achievements Considered:** [Number, with source: provided / ShipLift Quarter]
+**Pulse Evidence Considered:** [Number of Pulse items, or "None recorded"]
 ```
 
 ---
