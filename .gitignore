@@ -1,2 +1,11 @@
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# ShipLift's own local evidence store must never be committed — its real
+# location is ~/.shiplift (outside the repo), but ignore it here too in
+# case a --home override or manual test run ever points it at the repo.
+.shiplift/
+
+# Local test/scratch output from scripts/test-*.sh and test_*.py runs.
+*.tmp
