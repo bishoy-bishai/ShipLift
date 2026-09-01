@@ -27,6 +27,8 @@ Achievement Ranking
 Achievement Generator
     ↓
 Command Output
+    ↓
+(optional) Goals Engine → ShipLift Goals
 ```
 
 ## Supported Commands
@@ -80,6 +82,34 @@ Topics to Discuss
 - business outcomes
 - leadership/ownership claims
 (unless supported by evidence)
+
+---
+
+### ShipLift Goals
+
+Answers: **How do my achievements support my professional goals, and how much progress can I prove?**
+
+Builds on `ShipLift Quarter` achievements (reused, not regenerated) and evaluates goals for SMART quality, maps achievements to goals, gathers evidence, and reports progress and gaps.
+
+```
+ShipLift Quarter
+      ↓
+5–7 Achievements
+      ↓
+ShipLift Goals
+      ↓
+SMART Validation → Achievement → Goal Mapping → Evidence → Progress → Gaps → Recommendations
+```
+
+Supports goals-only, goals+achievements, a single goal, or no goals at all (in which case ShipLift proposes **Suggested Goals** from recurring achievement themes and asks for confirmation — it never invents official goals on the user's behalf).
+
+**Do not invent:**
+- baselines, targets, or deadlines
+- progress percentages without a valid baseline/target/current triple
+- goal completion without evidence
+- business outcomes from technical metrics (e.g. test count ≠ coverage)
+
+Full rules: [Goals Engine](references/goals-engine.md)
 
 ---
 
@@ -182,12 +212,13 @@ See detailed documentation in the `references/` folder:
 - [Anti-BS Rules](references/anti-bs-rules.md) — Mandatory guardrails
 - [Commands](references/commands.md) — Detailed command specifications
 - [Output Templates](references/output-templates.md) — Command output formats
+- [Goals Engine](references/goals-engine.md) — SMART goals, achievement mapping, progress, and gaps for `ShipLift Goals`
 
 ---
 
 ## How to Use ShipLift in a Coding Agent
 
-1. **Invoke** the skill with a command: `ShipLift Quarter`, `ShipLift Standup`, or `ShipLift 1:1`
+1. **Invoke** the skill with a command: `ShipLift Quarter`, `ShipLift Standup`, `ShipLift 1:1`, or `ShipLift Goals`
 2. **Analyze** the repository using the Git Intelligence rules
 3. **Build** an evidence matrix of changes
 4. **Group** related work using clustering rules
@@ -387,6 +418,8 @@ If uncertain about a claim, remove it or rephrase with evidence.
 - ...
 ```
 
+**Goals output:** see [Output Templates](references/output-templates.md) and [Goals Engine](references/goals-engine.md) for the full `ShipLift Goals` process (SMART validation, achievement mapping, evidence, progress, gaps, recommendations).
+
 ---
 
 ## Implementation Details
@@ -420,7 +453,8 @@ shiplift/
 │   ├── intelligence-rules.md
 │   ├── anti-bs-rules.md
 │   ├── metrics.md
-│   └── output-templates.md
+│   ├── output-templates.md
+│   └── goals-engine.md
 └── scripts/
     └── git-analysis.sh
 ```
@@ -443,3 +477,14 @@ shiplift/
 > Make the value of the work clearer, not bigger.
 
 Every achievement should answer: **Why did this work matter?**
+
+The full ShipLift command set:
+
+```
+🚀 ShipLift
+
+ShipLift Quarter   — "What did I accomplish?"
+ShipLift Goals     — "How did my work move my goals?"
+ShipLift Standup   — "What do I say today?"
+ShipLift 1:1       — "What should I discuss with my manager?"
+```

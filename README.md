@@ -11,8 +11,9 @@ ShipLift analyzes your repository and converts raw engineering activity into cle
 ### For Claude Code / OpenAI Codex Users
 
 1. Copy the `shiplift/` directory to your skills directory
-2. Use one of the three commands:
+2. Use one of the four commands:
    - `ShipLift Quarter` - Analyze current quarter (5-7 achievements)
+   - `ShipLift Goals` - Map achievements to your professional goals
    - `ShipLift Standup` - Prepare standup update
    - `ShipLift 1:1` - Prepare manager 1:1 talking points
 
@@ -20,6 +21,8 @@ ShipLift analyzes your repository and converts raw engineering activity into cle
 
 ```
 ShipLift Quarter
+
+ShipLift Goals
 
 ShipLift Standup 2-weeks
 
@@ -109,6 +112,76 @@ Analyze recent activity and prepare concise standup update.
 - Waiting on security approval for API changes
 ```
 
+### ShipLift Goals
+
+Answers: **How did my work move my goals, and how much progress can I prove?**
+
+Builds on `ShipLift Quarter` achievements and evaluates whether your goals are SMART, maps achievements to them, and reports evidence, progress, and gaps.
+
+```
+Achievements
+     ↓
+Goals
+     ↓
+SMART validation
+     ↓
+Goal alignment
+     ↓
+Evidence
+     ↓
+Progress
+```
+
+If you don't provide goals, ShipLift analyzes recent achievements, identifies recurring themes, and proposes **Suggested Goals** for you to confirm — it never invents official goals on your behalf.
+
+**Example:**
+
+```
+ShipLift Goals
+
+Goals:
+1. Improve frontend code quality.
+
+Achievements:
+1. Test Quality & Regression Protection
+```
+
+```
+# 🎯 Goals Review
+
+## Goal 1 — Improve frontend code quality
+
+### SMART Score
+3/5
+
+Specific       ✓
+Measurable     ✗
+Achievable     ?
+Relevant       ✓
+Time-bound     ✗
+
+### Progress
+Supporting evidence found (coverage progress: Unknown)
+
+### Goal Alignment
+Strong
+
+### Supporting Achievements
+- Test Quality & Regression Protection
+
+### Evidence
+✓ +35% test suite growth
+⚠ Current coverage percentage is unavailable
+
+### Gaps
+- Missing measurable target and deadline
+
+### Recommendation
+Add a current coverage baseline, target, and deadline so progress can be measured.
+```
+
+See [references/goals-engine.md](references/goals-engine.md) for the full SMART validation, mapping, and progress rules.
+
 ### ShipLift 1:1
 
 Prepare comprehensive talking points for a manager 1:1.
@@ -170,7 +243,8 @@ shiplift/
 │   ├── intelligence-rules.md         (Work pattern recognition)
 │   ├── anti-bs-rules.md              (Mandatory guardrails)
 │   ├── metrics.md                    (Metric calculation)
-│   └── output-templates.md           (Output formatting)
+│   ├── output-templates.md           (Output formatting)
+│   └── goals-engine.md               (SMART goals, mapping, progress)
 └── scripts/
     └── git-analysis.sh               (Helper script)
 ```
@@ -241,13 +315,16 @@ Precise rules for calculating and presenting metrics.
 - Code metrics (files, lines)
 
 #### 7. Commands
-Specification for each of the three commands.
+Specification for each of the four commands.
 
 **Includes:**
 - Input requirements
 - Process steps
 - Output format
 - Validation rules
+
+#### 8. Goals Engine
+Rules for SMART goal validation, achievement-to-goal mapping, evidence, progress, and gaps behind `ShipLift Goals`.
 
 #### 8. Output Templates
 Templates and examples for generating achievement text.

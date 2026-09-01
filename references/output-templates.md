@@ -121,6 +121,92 @@ Add at the top:
 
 ---
 
+## Goals Review Template
+
+### Full Structure
+
+```
+# 🎯 Goals Review
+
+## Goal 1 — [Goal]
+
+### SMART Score
+X/5
+
+Specific       ✓ / ✗ / ?
+Measurable     ✓ / ✗ / ?
+Achievable     ✓ / ✗ / ?
+Relevant       ✓ / ✗ / ?
+Time-bound     ✓ / ✗ / ?
+
+### Progress
+[Not Started / Early Progress / On Track / Strong Progress / At Risk / Achieved / Unknown]
+
+### Goal Alignment
+[Direct / Strong Support / Supporting / Weak / No Clear Alignment]
+
+### Supporting Achievements
+- [Achievement A]
+- [Achievement B]
+
+### Evidence
+- ✓ [Direct or supporting evidence]
+- ⚠ [Missing evidence]
+
+### Gaps
+- [Missing information: baseline, target, deadline, etc.]
+
+### Recommendation
+[Short, useful, evidence-grounded recommendation]
+```
+
+Repeat the `## Goal N` block for each goal, then finish with:
+
+```
+## Overall Goal Review
+
+### Strongest Areas
+- [Goal or theme with the strongest evidence]
+
+### Goals Needing Attention
+- [Goal with low SMART score or weak evidence]
+
+### Missing Evidence
+- [Evidence gaps across goals]
+
+### Suggested Focus
+- [Where to focus next, grounded in gaps above]
+```
+
+### Suggested Goals Template (No Goals Provided)
+
+```
+Based on your recent work, I found [N] recurring themes:
+
+1. [Theme 1]
+2. [Theme 2]
+3. [Theme 3]
+
+Suggested Goals:
+
+1. [Suggested goal 1]
+2. [Suggested goal 2]
+3. [Suggested goal 3]
+
+These are suggestions, not confirmed goals.
+```
+
+### Metadata
+
+Add at the top when useful:
+
+```
+**Goals Analyzed:** [Number]
+**Achievements Considered:** [Number, with source: provided / ShipLift Quarter]
+```
+
+---
+
 ## Common Patterns for Points
 
 ### Measuring Implementation

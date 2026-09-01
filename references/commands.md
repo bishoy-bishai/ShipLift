@@ -1,6 +1,6 @@
 # Commands
 
-This document specifies the three core ShipLift commands and their expected behavior.
+This document specifies the four core ShipLift commands and their expected behavior.
 
 ---
 
@@ -256,6 +256,112 @@ Only report what can be proven.
 - [ ] No invented stakeholder feedback
 - [ ] Growth points are genuine
 - [ ] Topics are discussion-ready
+
+---
+
+## Command: ShipLift Goals
+
+### Purpose
+
+Evaluate whether the user's professional goals are SMART, map their engineering achievements to those goals, and report evidence, progress, and gaps.
+
+### Input
+
+One of:
+
+- Goals only
+- Goals + achievements
+- A single goal
+- No input (ShipLift proposes Suggested Goals from recent achievements)
+
+### Output
+
+Per goal: SMART score, progress, alignment, supporting achievements, evidence, gaps, and a recommendation. Finished with an "Overall Goal Review" summary.
+
+See [Output Templates](output-templates.md) for the exact format.
+
+### Process
+
+1. **Parse** input mode (goals only / goals+achievements / single goal / none)
+2. **If no achievements provided**, reuse the most recent `ShipLift Quarter` output, or run the Quarter pipeline to generate candidates
+3. **If no goals provided**, identify recurring themes across achievements and produce 2-4 labeled **Suggested Goals**, then stop and ask for confirmation
+4. **Validate** each goal against SMART (Specific, Measurable, Achievable, Relevant, Time-bound), using `✓ / ✗ / ?`
+5. **Suggest** an improved goal version when useful (using placeholders for any missing baseline/target, never invented numbers)
+6. **Map** each achievement to the goal(s) it supports (Direct / Strong Support / Supporting / Weak / No Clear Alignment)
+7. **Collect** evidence per goal (Direct / Supporting / Missing)
+8. **Evaluate** progress (Not Started / Early Progress / On Track / Strong Progress / At Risk / Achieved / Unknown) — only calculate a numeric percentage when baseline, target, and current value all exist for the same metric
+9. **Assess** goal health (Healthy / Needs Attention / At Risk / Unknown) and identify gaps
+10. **Output** in the Goals Review format, finishing with the Overall Goal Review summary
+
+Full rules: [Goals Engine](goals-engine.md)
+
+### Important Constraints
+
+**Do NOT invent:**
+- baselines, targets, or deadlines
+- progress percentages without a valid baseline/target/current triple
+- goal completion or achievement from mere existence of related work
+- business outcomes from technical metrics (e.g. test count ≠ coverage)
+
+### Example Output
+
+```
+# 🎯 Goals Review
+
+## Goal 1 — Improve frontend code quality
+
+### SMART Score
+3/5
+
+Specific       ✓
+Measurable     ✗
+Achievable     ?
+Relevant       ✓
+Time-bound     ✗
+
+### Progress
+Supporting evidence found (coverage progress: Unknown)
+
+### Goal Alignment
+Strong
+
+### Supporting Achievements
+- Test Quality & Regression Protection
+- Frontend Architecture Improvements
+
+### Evidence
+✓ +35% test suite growth
+✓ Added regression tests for critical flows
+⚠ Current coverage percentage is unavailable
+
+### Gaps
+- Missing measurable target and deadline
+
+### Recommendation
+Add a current coverage baseline and target, plus a deadline, so progress can be measured.
+
+## Overall Goal Review
+
+### Strongest Areas
+- Test quality and regression protection
+
+### Goals Needing Attention
+- Improve frontend code quality (missing measurable target)
+
+### Missing Evidence
+- Current test coverage percentage
+
+### Suggested Focus
+- Capture a coverage baseline to make this goal measurable
+```
+
+### Validation
+
+- [ ] Every goal has a SMART score with honest `?` where evidence is missing
+- [ ] Mappings only exist where evidence supports them
+- [ ] Progress percentage only shown with baseline/target/current all present
+- [ ] No invented baselines, targets, deadlines, or business outcomes
+- [ ] Suggested Goals (when generated) are clearly labeled and require confirmation
 
 ---
 
