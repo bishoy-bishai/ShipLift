@@ -8,6 +8,8 @@ It answers a question none of the other commands answer:
 
 This file contains the detailed behavior and evidence rules for `ShipLift Pulse`. See [Commands](commands.md) for the command contract and [Output Templates](output-templates.md) for the exact output format.
 
+Pulse evidence uses the unified evidence model defined in [Evidence Engine](core/evidence-engine.md) §2. This file focuses on what's specific to Pulse: the question flow, categories, and confidence rules for `source: "user"` evidence. Linking, strength, impact analysis, signals, and blind spots — which apply to Pulse and Git evidence alike — live in [references/core/](core/).
+
 ---
 
 ## 1. Core Principle
@@ -100,6 +102,8 @@ source        "user" for Pulse-created evidence (see §5)
 confidence    High / Medium / Low (see §8)
 metadata      free-form structured details (e.g. PR count)
 impact        "Unknown" unless the user gave real evidence of outcome
+links         ids of other evidence items this is related to (see
+              Evidence Linking, core/evidence-linking.md)
 ```
 
 Implementation reference: `scripts/pulse-store.sh` (backed by `scripts/pulse_store.py`) implements this model as the MVP `JSONStore`. See §12.

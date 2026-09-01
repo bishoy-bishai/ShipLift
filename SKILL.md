@@ -14,22 +14,26 @@ ShipLift bridges the gap between raw engineering activity and meaningful communi
 ```
 Repository                    ShipLift Pulse (adaptive Q&A)
     ↓                                 ↓
-Repository Analysis          Raw Evidence (EvidenceStore)
-    ↓                                 │
-Git Intelligence  ←───────────────────┘
-    ↓
-Evidence Matrix
-    ↓
-Impact Engine
-    ↓
-Achievement Ranking
-    ↓
-Achievement Generator
-    ↓
-Command Output
-    ↓
+Git Evidence                  Human Evidence
+    └───────────────┬─────────────────┘
+                     ↓
+              EVIDENCE ENGINE
+        (linking · strength · signals)
+                     ↓
+              Impact Analysis
+                     ↓
+             Anti-Inflation Layer
+                     ↓
+            Achievement Ranking
+                     ↓
+           Achievement Generator
+                     ↓
+              Command Output
+                     ↓
 (optional) Goals Engine → ShipLift Goals
 ```
+
+Git and Pulse are both first-class evidence sources feeding one shared Evidence Engine — see [Evidence Engine](references/core/evidence-engine.md). Commands are interfaces; the Evidence Engine is the brain behind all of them.
 
 ## Supported Commands
 
@@ -274,6 +278,14 @@ See detailed documentation in the `references/` folder:
 - [Goals Engine](references/goals-engine.md) — SMART goals, achievement mapping, progress, and gaps for `ShipLift Goals`
 - [Career Evidence Engine](references/career-evidence-engine.md) — Career aggregation, evidence strength, and role modes for `ShipLift CV`
 - [Pulse Engine](references/pulse-engine.md) — Evidence model, question flow, and storage rules for `ShipLift Pulse`
+- [Evidence Engine](references/core/evidence-engine.md) — The shared intelligence layer behind every command:
+  - [Evidence Linking](references/core/evidence-linking.md)
+  - [Evidence Strength](references/core/evidence-strength.md)
+  - [Impact Analysis](references/core/impact-analysis.md)
+  - [Signal Detection](references/core/signal-detection.md)
+  - [Blind Spots](references/core/blind-spots.md)
+  - [Anti-Inflation](references/core/anti-inflation.md)
+  - [Writing Constitution](references/core/writing-constitution.md)
 
 ---
 
@@ -526,11 +538,22 @@ shiplift/
 │   ├── output-templates.md
 │   ├── goals-engine.md
 │   ├── career-evidence-engine.md
-│   └── pulse-engine.md
+│   ├── pulse-engine.md
+│   └── core/
+│       ├── evidence-engine.md
+│       ├── evidence-linking.md
+│       ├── evidence-strength.md
+│       ├── impact-analysis.md
+│       ├── signal-detection.md
+│       ├── blind-spots.md
+│       ├── anti-inflation.md
+│       └── writing-constitution.md
 └── scripts/
     ├── git-analysis.sh
     ├── pulse-store.sh
-    └── pulse_store.py
+    ├── pulse_store.py
+    ├── evidence-engine.sh
+    └── evidence_engine.py
 ```
 
 ---

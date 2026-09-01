@@ -1,182 +1,351 @@
-# ShipLift Skill
+# 🚀 ShipLift
 
 **Transform engineering work into meaningful achievements.**
 
-ShipLift analyzes your repository and converts raw engineering activity into clear, evidence-backed achievements. The goal is not to summarize commits—it's to understand what you shipped, why it matters, and communicate it clearly.
+ShipLift analyzes your repository and converts raw engineering activity into clear, evidence-backed achievements.
+
+The goal is not to summarize commits.
+
+The goal is to understand:
+
+* What you shipped
+* Why it matters
+* What impact it had
+* What evidence proves it
+* How it connects to your goals
+* How to communicate it clearly
+
+ShipLift combines **code evidence** with **human evidence** — because Git can see your code, but it cannot see everything you do.
 
 ---
 
-## Quick Start
+# 🚀 Installation
 
-### For Claude Code / OpenAI Codex Users
+ShipLift follows the **Agent Skills** standard and can be installed into compatible AI coding agents.
 
-1. Copy the `shiplift/` directory to your skills directory
-2. Use one of the commands:
-   - `ShipLift Pulse` - Capture the work Git can't see (30–90 second Q&A)
-   - `ShipLift Quarter` - Analyze current quarter (5-7 achievements)
-   - `ShipLift Goals` - Map achievements to your professional goals
-   - `ShipLift Standup` - Prepare standup update
-   - `ShipLift 1:1` - Prepare manager 1:1 talking points
-   - `ShipLift CV` - Turn your engineering history into CV-ready bullets
+## Recommended — Skills CLI
 
-### Example Usage
+The easiest way to install ShipLift is using `npx skills`.
 
+### Install ShipLift
+
+```bash
+npx skills add bishoy-bishai/ShipLift
 ```
+
+The installer will detect the supported agents on your machine and let you choose where to install the skill.
+
+### Install for specific agents
+
+#### Claude Code
+
+```bash
+npx skills add bishoy-bishai/ShipLift -a claude-code
+```
+
+#### OpenAI Codex
+
+```bash
+npx skills add bishoy-bishai/ShipLift -a codex
+```
+
+#### Cursor
+
+```bash
+npx skills add bishoy-bishai/ShipLift -a cursor
+```
+
+#### Google Antigravity
+
+```bash
+npx skills add bishoy-bishai/ShipLift -a antigravity
+```
+
+### Install for multiple agents
+
+You can install ShipLift into multiple agents with one command:
+
+```bash
+npx skills add bishoy-bishai/ShipLift \
+  -a claude-code \
+  -a codex \
+  -a cursor \
+  -a antigravity
+```
+
+### Install globally
+
+To make ShipLift available across your projects:
+
+```bash
+npx skills add bishoy-bishai/ShipLift -g
+```
+
+Or globally for specific agents:
+
+```bash
+npx skills add bishoy-bishai/ShipLift \
+  -g \
+  -a claude-code \
+  -a codex \
+  -a cursor \
+  -a antigravity
+```
+
+---
+
+## GitHub CLI
+
+If you use GitHub CLI, you can install ShipLift with `gh skill install`.
+
+### Claude Code
+
+```bash
+gh skill install bishoy-bishai/ShipLift \
+  --agent claude-code \
+  --scope user
+```
+
+### OpenAI Codex
+
+```bash
+gh skill install bishoy-bishai/ShipLift \
+  --agent codex \
+  --scope user
+```
+
+### Cursor
+
+```bash
+gh skill install bishoy-bishai/ShipLift \
+  --agent cursor \
+  --scope user
+```
+
+### Antigravity
+
+```bash
+gh skill install bishoy-bishai/ShipLift \
+  --agent antigravity \
+  --scope user
+```
+
+---
+
+# ✅ Verify Installation
+
+After installation, open or restart your AI coding agent.
+
+Run:
+
+```text
 ShipLift Pulse
+```
 
+If ShipLift is installed correctly, the agent should recognize the command and start the Pulse flow.
+
+You can also test the main analysis:
+
+```text
 ShipLift Quarter
+```
 
+And the other commands:
+
+```text
 ShipLift Goals
 
-ShipLift Standup 2-weeks
+ShipLift Standup
 
-ShipLift 1:1 3-months
+ShipLift 1:1
 
 ShipLift CV
-
-ShipLift CV Senior
 ```
 
 ---
 
-## What ShipLift Does
+# 🔄 Update ShipLift
 
-### The Pipeline
+To update skills installed through the Skills CLI:
 
-```
-Repository
-    ↓
-Repository Analysis (Git history, diffs, PRs)
-    ↓
-Git Intelligence (Grouping related commits)
-    ↓
-Evidence Matrix (Gathering proof)
-    ↓
-Impact Engine (Ranking by value)
-    ↓
-Achievement Ranking (Prioritizing top achievements)
-    ↓
-Achievement Generator (Creating output)
-    ↓
-Command Output (Standup, 1:1, or Quarter)
+```bash
+npx skills update
 ```
 
-### Key Philosophy
+To update a GitHub CLI installation:
+
+```bash
+gh skill update
+```
+
+---
+
+# 🛠️ Manual Installation
+
+If you prefer to install ShipLift manually, clone the repository:
+
+```bash
+git clone https://github.com/bishoy-bishai/ShipLift.git
+```
+
+Then copy the ShipLift skill directory into the skills directory supported by your AI coding agent.
+
+The skill entry point is:
+
+```text
+SKILL.md
+```
+
+The skill also includes:
+
+```text
+references/
+scripts/
+```
+
+`SKILL.md` is the main entry point.
+
+The `references/` directory contains ShipLift's intelligence, rules, frameworks, and output specifications.
+
+The `scripts/` directory contains local helper scripts used by the skill.
+
+> **Recommended:** Use `npx skills add bishoy-bishai/ShipLift` whenever possible. It handles the agent-specific installation for you.
+
+---
+
+# ⚡ Quick Start
+
+After installation, start with:
+
+```text
+ShipLift Pulse
+```
+
+Pulse captures important work that Git cannot see.
+
+Then run:
+
+```text
+ShipLift Quarter
+```
+
+to analyze your current quarter.
+
+For goals:
+
+```text
+ShipLift Goals
+```
+
+For your standup:
+
+```text
+ShipLift Standup
+```
+
+For your next manager 1:1:
+
+```text
+ShipLift 1:1
+```
+
+For your CV:
+
+```text
+ShipLift CV
+```
+
+---
+
+# 🧠 What ShipLift Does
+
+ShipLift analyzes your engineering work and turns it into meaningful career evidence.
+
+It uses two main evidence sources:
+
+```text
+                    SHIPLIFT
+                       │
+          ┌────────────┴────────────┐
+          ↓                         ↓
+     CODE EVIDENCE             HUMAN EVIDENCE
+          │                         │
+         Git                      Pulse
+          │                         │
+          └────────────┬────────────┘
+                       ↓
+                EVIDENCE ENGINE
+                       │
+          ┌────────────┼────────────┐
+          ↓            ↓            ↓
+       Linking      Strength      Signals
+          │            │            │
+          └────────────┼────────────┘
+                       ↓
+                 IMPACT ANALYSIS
+                       ↓
+                ANTI-INFLATION
+                       ↓
+               CAREER INTELLIGENCE
+                       │
+          ┌────────────┼────────────┐
+          ↓            ↓            ↓
+    Achievements     Goals          CV
+          │            │            │
+          └────────────┼────────────┘
+                       ↓
+                 Standup / 1:1
+```
+
+The core idea:
 
 > **Make the value of the work clearer, not bigger.**
 
-Every claim must be backed by evidence. Every metric must be calculated correctly. Every achievement must communicate impact, not activity.
+---
+
+# ✨ What ShipLift Can Do
+
+## 🏆 Quarterly Achievements
+
+Analyze the current calendar quarter and return **5–7 strongest achievements**.
+
+ShipLift does not simply list commits.
+
+Instead, it groups related work into meaningful engineering stories.
+
+For example:
+
+```text
+Added 12 tests
+Fixed 4 bugs
+Updated 6 components
+Reviewed 8 PRs
+```
+
+can become:
+
+### Test Quality & Regression Protection
+
+**8 points**
+
+* Increased the automated test suite by 35%.
+* Added regression tests for critical flows.
+* Improved coverage of important edge cases.
+
+The goal is to communicate the **achievement**, not the activity list.
 
 ---
 
-## Commands
+# 🎯 Goals
 
-### ShipLift Pulse
+ShipLift connects your achievements and evidence to your professional goals.
 
-Captures the work Git cannot see.
+Example:
 
-ShipLift bridges the gap between raw engineering activity and meaningful communication — but Git only sees code. Pulse fills the blind spot: who you helped, what you reviewed, what you decided, what you investigated, what you unblocked, and anything else that never became a commit.
-
-It's a short, adaptive conversation — not a report you have to write:
-
-```
-ShipLift Pulse
-```
-
-```
-Did you help anyone yesterday?
-Did you review someone else's code?
-Did you make or influence a technical decision?
-Did you start an investigation or initiative?
-Did you unblock anything?
-Did you do anything important that wouldn't show up in Git?
-```
-
-Pulse is:
-- **Short** — 30–90 seconds for a normal day
-- **Adaptive** — skips questions your earlier answers already covered
-- **Evidence-based** — records what you actually said, never invents impact
-- **Local-first** — stored under `~/.shiplift/`, never in the repository, never uploaded
-- **Integrated** — feeds Standup, Quarter, Goals, CV, and 1:1 as a second evidence source alongside Git
-
-"Not sure" and "nothing" are valid answers — Pulse never pressures you into manufacturing an achievement.
-
-**Example:**
-
-```
-📝 Pulse captured
-
-🤝 Collaboration
-Helped a teammate resolve a React rendering issue.
-
-👀 Code Review
-Reviewed 3 PRs and identified a validation issue.
-
-🔍 Investigation
-Started investigating Cypress test instability.
-```
-
-See [references/pulse-engine.md](references/pulse-engine.md) for the full evidence model, question flow, and storage rules.
-
-### ShipLift Quarter
-
-Analyze the **current calendar quarter** and return 5–7 of your strongest achievements.
-
-**Output includes:**
-- Meaningful engineering impact
-- Measurable improvements
-- Product/reliability/quality value
-- Long-term technical value
-
-**Example:**
-
-```
-## Q3 2024 Achievements
-
-### 1. Payment Flow Reliability & Feature Completion
-- Implemented retry logic preventing duplicate charges
-- Resolved 3 critical bugs in payment submission
-- Expanded test coverage by 35% (120 → 162 tests)
-
-### 2. Frontend Performance Optimization
-- Reduced bundle size by 12% (245KB → 215KB)
-- Improved load time from 3.2s to 2.1s (34% faster)
-- Implemented lazy loading for product catalog
-
-[... 3-5 more achievements ...]
-```
-
-### ShipLift Standup
-
-Analyze recent activity and prepare concise standup update.
-
-**Output format:**
-
-```
-## Standup Update
-
-**Done:**
-- Merged payment retry logic (PR #456)
-- Completed form validation across 8 components (PR #457)
-
-**Next:**
-- Implementing dark mode support (60% complete)
-- Testing edge cases in payment flow
-
-**Blockers:**
-- Waiting on security approval for API changes
-```
-
-### ShipLift Goals
-
-Answers: **How did my work move my goals, and how much progress can I prove?**
-
-Builds on `ShipLift Quarter` achievements and evaluates whether your goals are SMART, maps achievements to them, and reports evidence, progress, and gaps.
-
-```
-Achievements
+```text
+Achievement
      ↓
-Goals
+Goal
      ↓
 SMART validation
      ↓
@@ -185,605 +354,618 @@ Goal alignment
 Evidence
      ↓
 Progress
+     ↓
+Gaps
 ```
 
-If you don't provide goals, ShipLift analyzes recent achievements, identifies recurring themes, and proposes **Suggested Goals** for you to confirm — it never invents official goals on your behalf.
+ShipLift can also identify recurring themes in your work and suggest possible goals.
 
-**Example:**
+It never presents a suggested goal as an official goal unless you confirm it.
 
+---
+
+# 🗣️ Standup
+
+ShipLift combines recent Git activity with Pulse evidence.
+
+Example:
+
+```text
+## Standup
+
+Done:
+- Fixed authentication validation issue
+- Added regression tests
+- Helped a teammate with a React issue
+
+Next:
+- Continue authentication edge cases
+
+Blockers:
+- None
 ```
-ShipLift Goals
 
-Goals:
-1. Improve frontend code quality.
+---
 
-Achievements:
-1. Test Quality & Regression Protection
+# 🤝 1:1
+
+ShipLift prepares evidence-backed talking points for your manager 1:1.
+
+It can surface:
+
+* What you delivered
+* Impact
+* Challenges
+* Goal progress
+* Technical ownership
+* Collaboration
+* Investigations
+* Initiatives
+* Growth
+* Topics to discuss
+
+---
+
+# 📄 CV
+
+ShipLift can analyze your engineering history and turn meaningful work into CV-ready bullets.
+
+It focuses on:
+
+```text
+Real evidence
++
+Clear contribution
++
+Measured results
++
+Known impact
 ```
 
+It never invents metrics.
+
+Example:
+
+```text
+Increased the automated test suite by 35% and added
+regression coverage for critical frontend flows.
 ```
-# 🎯 Goals Review
 
-## Goal 1 — Improve frontend code quality
+You can also scope the analysis:
 
-### SMART Score
-3/5
+```text
+ShipLift CV 2026
 
-Specific       ✓
-Measurable     ✗
-Achievable     ?
-Relevant       ✓
-Time-bound     ✗
+ShipLift CV Q1 2026
 
-### Progress
-Supporting evidence found (coverage progress: Unknown)
+ShipLift CV last 2 years
 
-### Goal Alignment
-Strong
+ShipLift CV Senior
 
-### Supporting Achievements
-- Test Quality & Regression Protection
+ShipLift CV Lead
+```
+
+The scope changes what is emphasized — never what is invented.
+
+---
+
+# 🧘 Pulse
+
+Not everything you do appears in Git.
+
+That's why ShipLift has **Pulse**.
+
+Pulse is a short, adaptive Q&A designed to capture the work Git cannot see.
+
+For example:
+
+```text
+Did you help anyone yesterday?
+
+Did you review someone's code?
+
+Did you make an important technical decision?
+
+Did you investigate something?
+
+Did you start an initiative?
+
+Did you unblock anyone?
+
+Did you do anything important that wouldn't show up in Git?
+```
+
+Pulse is:
+
+* **Short** — usually 30–90 seconds
+* **Adaptive** — avoids unnecessary questions
+* **Evidence-based** — records what you actually said
+* **Local-first** — stored under `~/.shiplift/`
+* **Integrated** — feeds Quarter, Goals, Standup, 1:1, and CV
+
+"Nothing" and "Not sure" are valid answers.
+
+Pulse never pressures you to manufacture an achievement.
+
+---
+
+# 🔗 Evidence Linking
+
+ShipLift does not treat every activity as a separate achievement.
+
+It connects related evidence.
+
+For example:
+
+```text
+Started investigation
+        ↓
+Found root cause
+        ↓
+Implemented fix
+        ↓
+Added regression tests
+        ↓
+Shared findings with the team
+```
+
+This can become one meaningful engineering story.
+
+---
+
+# 📈 Impact Analysis
+
+ShipLift separates:
+
+```text
+Activity
+Contribution
+Impact
+Outcome
+```
+
+These are not the same thing.
+
+For example:
+
+```text
+Reviewed 5 PRs
+```
+
+does not automatically mean:
+
+```text
+Improved team productivity by 30%.
+```
+
+If the impact is unknown, ShipLift says:
+
+```text
+Impact: Unknown
+```
+
+That's intentional.
+
+---
+
+# 🛡️ Anti-BS Engine
+
+ShipLift follows one important rule:
+
+> **Never make the engineer sound more impressive than the evidence allows.**
+
+ShipLift does not invent:
+
+* Percentages
+* Productivity improvements
+* Revenue impact
+* Cost savings
+* Users affected
+* Time saved
+* Business results
+* Leadership claims
+
+It also avoids turning small activities into huge achievements.
+
+```text
+Activity ≠ Impact
+
+Volume ≠ Impact
+
+Attendance ≠ Contribution
+
+Contribution ≠ Business Result
+```
+
+---
+
+# 🧠 Career Signals
+
+Over time, ShipLift can identify recurring patterns.
+
+For example:
+
+```text
+Repeated code reviews
++
+Helping teammates
++
+Testing improvements
++
+Technical discussions
+```
+
+may indicate:
+
+> Consistent contribution to engineering quality and collaboration.
+
+Signals are not automatically treated as achievements.
+
+They become stronger as evidence accumulates.
+
+---
+
+# 🔍 Blind Spots
+
+ShipLift can identify areas where evidence is limited.
+
+Example:
+
+```text
+Technical Delivery      Strong
+Code Quality            Strong
+Problem Solving         Strong
+Ownership               Moderate
+Collaboration           Moderate
+Mentoring               Limited
+Cross-team Impact       Limited
+```
+
+ShipLift does not say:
+
+> "You did not mentor anyone."
+
+It says:
+
+> **"ShipLift has limited evidence of mentoring this quarter."**
+
+ShipLift knows what it has evidence for.
+
+It does not know everything you did.
+
+---
+
+# 📝 Writing Style
+
+ShipLift uses a strict writing constitution.
+
+The language should be:
+
+* Simple
+* Clear
+* Direct
+* Human
+* Professional
+* Evidence-based
+
+It should sound like:
+
+> **A senior engineer explaining their work to another engineer.**
+
+Not like:
+
+* HR
+* A recruiter
+* A consultant
+* A marketing website
+* An AI-generated performance review
+
+### Example
+
+❌
+
+> Spearheaded a transformative initiative that significantly enhanced the organization's automated testing capabilities.
+
+✅
+
+> Increased automated test coverage by 35% and added regression tests for critical flows.
+
+---
+
+# 🚫 No Corporate Buzzwords
+
+ShipLift avoids unnecessary language such as:
+
+```text
+spearheaded
+leveraged
+facilitated
+orchestrated
+synergized
+empowered
+fostered
+cultivated
+operationalized
+best-in-class
+world-class
+game-changing
+transformative
+cutting-edge
+```
+
+Simple language wins.
+
+---
+
+# 🏗️ Architecture
+
+## Directory Structure
+
+```text
+ShipLift/
+│
+├── SKILL.md
+├── README.md
+├── VALIDATION.md
+│
+├── references/
+│   ├── achievement-framework.md
+│   ├── commands.md
+│   ├── evidence-matrix.md
+│   ├── impact-engine.md
+│   ├── intelligence-rules.md
+│   ├── anti-bs-rules.md
+│   ├── metrics.md
+│   ├── output-templates.md
+│   ├── goals-engine.md
+│   ├── career-evidence-engine.md
+│   └── pulse-engine.md
+│
+└── scripts/
+    ├── git-analysis.sh
+    ├── pulse-store.sh
+    └── pulse_store.py
+```
+
+---
+
+# 🧩 Core Intelligence
+
+ShipLift's intelligence layer is built around:
 
 ### Evidence
-✓ +35% test suite growth
-⚠ Current coverage percentage is unavailable
 
-### Gaps
-- Missing measurable target and deadline
+What actually happened.
 
-### Recommendation
-Add a current coverage baseline, target, and deadline so progress can be measured.
+### Linking
+
+Which pieces of evidence belong together.
+
+### Strength
+
+How strong the evidence is.
+
+### Impact
+
+What changed because of the work.
+
+### Signals
+
+Patterns that appear over time.
+
+### Blind Spots
+
+Areas where evidence is missing or weak.
+
+### Anti-Inflation
+
+Protection against unsupported claims.
+
+### Writing Constitution
+
+Rules controlling how ShipLift communicates.
+
+---
+
+# 🧪 Design Principles
+
+## 1. Evidence Over Adjectives
+
+Bad:
+
+> Huge improvement in engineering quality.
+
+Good:
+
+> Increased test coverage by 35%.
+
+---
+
+## 2. Facts Over Assumptions
+
+Bad:
+
+> Improved productivity by 20%.
+
+when there is no measurement.
+
+Good:
+
+> Added automated tests for critical flows.
+
+---
+
+## 3. Stories Over Activity Lists
+
+Bad:
+
+```text
+Added test
+Fixed bug
+Reviewed PR
+Changed component
 ```
 
-See [references/goals-engine.md](references/goals-engine.md) for the full SMART validation, mapping, and progress rules.
+Good:
 
-### ShipLift 1:1
+> Improved automated testing by increasing coverage and adding regression protection for critical flows.
 
-Prepare comprehensive talking points for a manager 1:1.
+---
 
-**Output includes:**
-- What I Delivered
-- Impact
-- Challenges
-- Growth
-- Next Focus
-- Topics to Discuss
+## 4. Real Work Over Impressive Language
 
-**Example:**
+ShipLift should make your work easier to see.
 
-```
-## 1:1 Talking Points
+It should not make your story bigger.
 
-**What I Delivered:**
-- Settings page with API integration
-- Improved test coverage from 78% to 84%
+---
 
-**Impact:**
-- Enabled user customization feature
-- Strengthened regression protection
+# 🔄 Recommended Workflow
 
-**Challenges:**
-- Learned async error handling patterns
-- Coordinated with security team
+### During the week
 
-**Growth:**
-- Deepened payment systems expertise
-- Improved testing strategy
+Use:
 
-**Next Focus:**
-- Dark mode implementation
-- Performance optimization sprint
-
-**Topics to Discuss:**
-- Ready for architectural decisions?
-- Interested in [domain] deeper dive?
+```text
+ShipLift Pulse
 ```
 
-### ShipLift CV
+when you finish something meaningful that may not appear clearly in Git.
 
-Answers: **What did I actually build and accomplish at this company?**
+For example:
 
-ShipLift can analyze your engineering history and turn meaningful work into evidence-based CV bullets. Unlike the other commands, it looks across months or years rather than a single quarter. It:
+* Helped someone
+* Reviewed code
+* Investigated a problem
+* Made a technical decision
+* Started an initiative
+* Documented something
+* Unblocked the team
 
-- groups related commits into engineering stories
-- identifies your most meaningful engineering contributions
-- extracts measurable evidence (never confusing test count with coverage)
-- highlights technical impact without inventing business impact
-- avoids invented claims about leadership, ownership, or performance
-- produces 5–8 CV-ready bullets, or fewer when evidence doesn't support more
+### During the quarter
 
-Supports time scoping (`ShipLift CV 2026`, `ShipLift CV Q1 2026`, `ShipLift CV last 2 years`) and role-focused emphasis (`ShipLift CV Senior`, `ShipLift CV Lead`), which change what's emphasized, never what's invented.
+Use:
 
-**Example:**
-
+```text
+ShipLift Goals
 ```
+
+to understand how your work supports your goals.
+
+### Before standup
+
+```text
+ShipLift Standup
+```
+
+### Before your 1:1
+
+```text
+ShipLift 1:1
+```
+
+### End of quarter
+
+```text
+ShipLift Quarter
+```
+
+### CV update
+
+```text
 ShipLift CV
 ```
 
-```
-# 📄 CV Evidence
+---
 
-## Frontend Engineer — shiplift-web
+# 🛣️ Roadmap
 
-### Strongest Contributions
+ShipLift is designed to grow around the Evidence Engine.
 
-- Strengthened frontend regression protection by expanding the
-  automated test suite by 35% (120 → 162 tests) and improving
-  coverage of critical validation and edge-case scenarios.
-- Simplified shared frontend architecture by consolidating
-  reusable components and reducing duplicated implementation
-  across multiple product flows.
+Potential future evidence sources include:
 
-### Technical Highlights
-
-- React / TypeScript
-- Testing / Quality
-- CI/CD
+```text
+GitHub
+Linear
+Jira
+Slack
+Notion
+Calendar
 ```
 
-See [references/career-evidence-engine.md](references/career-evidence-engine.md) for the full aggregation, evidence-strength, and anti-BS rules.
+The architecture is intentionally designed so new sources can feed the same evidence system.
+
+The goal is not to add more commands.
+
+The goal is to make the existing commands smarter.
 
 ---
 
-## Architecture
+# 🤝 Contributing
 
-### Directory Structure
+Contributions are welcome.
 
-```
-shiplift/
-├── SKILL.md                          (Primary entry point)
-├── README.md                         (This file)
-├── VALIDATION.md                     (Acceptance criteria)
-├── references/
-│   ├── achievement-framework.md      (Grouping & clustering rules)
-│   ├── commands.md                   (Command specifications)
-│   ├── evidence-matrix.md            (Evidence hierarchy)
-│   ├── impact-engine.md              (Ranking framework)
-│   ├── intelligence-rules.md         (Work pattern recognition)
-│   ├── anti-bs-rules.md              (Mandatory guardrails)
-│   ├── metrics.md                    (Metric calculation)
-│   ├── output-templates.md           (Output formatting)
-│   ├── goals-engine.md               (SMART goals, mapping, progress)
-│   ├── career-evidence-engine.md     (CV aggregation, evidence strength, role modes)
-│   └── pulse-engine.md               (Pulse evidence model, question flow, storage)
-└── scripts/
-    ├── git-analysis.sh               (Helper script)
-    ├── pulse-store.sh                (Pulse EvidenceStore CLI)
-    └── pulse_store.py                (Pulse EvidenceStore implementation)
+When contributing, keep the core philosophy intact:
+
+```text
+Simple
+Evidence-based
+Local-first
+Human
+No unnecessary complexity
+No inflated claims
 ```
 
-### Core Components
+If a feature makes ShipLift more complicated without making the evidence better, question whether it belongs.
 
-#### 1. Achievement Framework
-Defines how to recognize and group related work into coherent achievements.
+---
 
-**Key concepts:**
-- Feature + tests + validation = ONE achievement
-- Related commits = ONE story
-- Test-only work = standalone only if broad
-- Refactor + feature = group together
+# ⭐ The Philosophy
 
-#### 2. Evidence Matrix
-Establishes evidence hierarchy from strongest to weakest.
+Most career systems ask:
 
-**Priority order:**
-1. Direct measurement (metrics, benchmarks)
-2. Actual code/diff
-3. PR/Issue context
-4. Commit message
-5. Inference
+> "What did you accomplish?"
 
-#### 3. Intelligence Rules
-Patterns for recognizing different types of work and grouping them appropriately.
+ShipLift asks a better question:
 
-**Patterns covered:**
-- Feature + Quality
-- Test-only work
-- Refactor + Feature
-- Bug clustering
-- Performance clustering
-- CI/Developer Experience
+> **"What evidence do we have of the value you created?"**
 
-#### 4. Impact Engine
-Ranking framework to prioritize achievements by value.
+Because engineers are usually good at building things.
 
-**Scoring dimensions:**
-- Scope (breadth of impact)
-- Complexity (difficulty)
-- Impact (value created)
-- Measurability (quantifiable?)
-- Long-term value (lasting benefit?)
-- Product relevance (alignment?)
-- Evidence confidence (how sure?)
+They're not always good at remembering them.
 
-#### 5. Anti-BS Rules
-Mandatory guardrails preventing overstatement.
+And they're even worse at explaining them six months later.
 
-**Forbidden:**
-- Inventing percentages
-- Inventing business impact
-- Inventing customer impact
-- Inventing hours saved
-- Inventing leadership
-- Unsourced stakeholder feedback
+ShipLift helps with that.
 
-#### 6. Metrics
-Precise rules for calculating and presenting metrics.
+---
 
-**Covered:**
-- Percentage change formulas
-- Percentage vs. percentage points
-- Test metrics (count, coverage, pass rate)
-- Performance metrics (load time, bundle size)
-- Code metrics (files, lines)
+# 🚀 Get Started
 
-#### 7. Commands
-Specification for each of the four commands.
-
-**Includes:**
-- Input requirements
-- Process steps
-- Output format
-- Validation rules
-
-#### 8. Goals Engine
-Rules for SMART goal validation, achievement-to-goal mapping, evidence, progress, and gaps behind `ShipLift Goals`.
-
-#### 9. Career Evidence Engine
-Rules for aggregating achievements across months/years into engineering stories, rating evidence strength, and role-focused emphasis (`Senior` / `Lead`) behind `ShipLift CV`.
-
-#### 10. Output Templates
-Templates and examples for generating achievement text.
-
-**Includes:**
-- Title formulas
-- Point patterns
-- Metric formatting
-- Common examples
-
-#### 11. Pulse Engine
-Rules for the adaptive Q&A, evidence model, categories, confidence, duplicate detection, company isolation, and local storage behind `ShipLift Pulse`.
-
-### Helper Script
-
-**`scripts/git-analysis.sh`**
-
-Provides repository snapshots to assist analysis:
+Install ShipLift:
 
 ```bash
-./git-analysis.sh status              # Repository status
-./git-analysis.sh log 7               # Last 7 days
-./git-analysis.sh quarter 2024-Q3     # Specific quarter
-./git-analysis.sh branches            # Recent branches
-./git-analysis.sh stats               # Repo statistics
-./git-analysis.sh diff HEAD~1 HEAD    # Compare commits
+npx skills add bishoy-bishai/ShipLift
 ```
 
-**`scripts/pulse-store.sh`**
+Then run:
 
-The local `EvidenceStore` behind `ShipLift Pulse` — stores and retrieves evidence under `~/.shiplift/`, isolated by company:
-
-```bash
-./pulse-store.sh init --company acme
-./pulse-store.sh add --company acme --category "Collaboration" \
-    --description "Helped a teammate fix a rendering issue." \
-    --work-date 2026-08-31
-./pulse-store.sh check-duplicate --company acme --description "..."
-./pulse-store.sh update --company acme --id <id> --description "..."
-./pulse-store.sh list --company acme --category "Code Review"
-./pulse-store.sh recent --company acme --days 7
-./pulse-store.sh by-quarter --company acme --quarter 2026-Q3
-./pulse-store.sh companies
+```text
+ShipLift Pulse
 ```
 
-Run `./scripts/test-pulse-store.sh` to exercise the store's test suite.
+Start capturing the work that Git cannot see.
 
----
+When you're ready:
 
-## How ShipLift Works
-
-### Step 1: Repository Analysis
-
-ShipLift gathers:
-- Git log and commit history
-- Pull requests and issues
-- File changes and diffs
-- Test changes and coverage
-- Build/CI information
-
-### Step 2: Git Intelligence
-
-ShipLift groups related commits:
-- Same PR = likely one feature
-- Same issue = likely related work
-- Same component = may be same story
-- Overlapping files = likely connected
-- Same time period = may be coordinated
-
-### Step 3: Evidence Matrix
-
-ShipLift validates each claim:
-- Direct measurements first
-- Actual code changes second
-- PR context third
-- Commit messages last
-- Never rely on inference alone
-
-### Step 4: Achievement Clustering
-
-ShipLift identifies higher-level stories:
-- Feature + tests + validation = ONE achievement
-- Bug fixes in same flow = ONE reliability story
-- Performance improvements in same area = ONE performance story
-- Developer tooling improvements = ONE DX story
-
-### Step 5: Impact Ranking
-
-ShipLift scores achievements:
-- Scope: How broad?
-- Complexity: How difficult?
-- Impact: How valuable?
-- Measurability: How provable?
-- Long-term value: Does it enable future work?
-- Product relevance: Aligned with strategy?
-- Evidence confidence: How certain?
-
-### Step 6: Achievement Generation
-
-ShipLift creates final output:
-- Outcome-oriented titles
-- 2-4 supporting points
-- Correct metric calculations
-- Clear, simple language
-- Evidence-backed claims
-
-### Step 7: Output Formatting
-
-ShipLift presents results:
-- Markdown format
-- Appropriate for the command
-- Ranked by impact
-- Ready to share
-
----
-
-## Core Principles
-
-### 1. Evidence First
-
-Every claim is backed by repository evidence. Never invent.
-
-### 2. Impact Over Activity
-
-Focus on what matters, not how much was done.
-
-### 3. Truth in Simplicity
-
-Communicate in simple language without exaggeration.
-
-### 4. Measurability
-
-Use metrics when available, but don't invent them.
-
-### 5. Appropriate Grouping
-
-Related work tells one story, not seven.
-
-### 6. No BS
-
-The Anti-BS Rules are mandatory and enforced.
-
----
-
-## The Difference: Engineering Impact vs. Commit Summary
-
-### Commit Summary Approach
-```
-"I made 8 commits this week"
-"Fixed bug, added feature, improved tests"
-"Worked on authentication and performance"
+```text
+ShipLift Quarter
 ```
 
-**Problem:** Focuses on activity, not impact.
-
-### ShipLift Engineering Impact Approach
-```
-Settings Experience Delivery & Reliability
-
-- Implemented settings page with API integration and full validation
-- Added comprehensive error handling for API failures
-- Wrote tests covering main flows and edge cases (12 new tests)
-
-Frontend Performance Optimization
-
-- Reduced bundle size by 12% (245KB → 215KB)
-- Improved load time from 3.2s to 2.1s (34% faster)
-```
-
-**Benefit:** Communicates what you actually shipped and why it mattered.
+See what you actually accomplished.
 
 ---
 
-## Installation
+## ShipLift
 
-ShipLift follows the **Agent Skills** standard structure and can be installed into any supported coding agent.
-
-### For Claude Code
-
-1. Clone or download this repository: `https://github.com/bishoy-bishai/ShipLift`
-2. Locate your Claude Code skills directory:
-   - Run: `Claude: Show Skills Directory` in your command palette
-   - Or check: `~/.claude/skills/`
-3. Copy the repository folder to your skills directory
-4. Restart Claude Code
-5. Use commands like: `ShipLift Quarter`
-
-**Official Reference:** [Claude Code Skills](https://claude.ai/docs/skills)
-
-### For OpenAI Codex
-
-1. Clone this repository: `https://github.com/bishoy-bishai/ShipLift`
-2. Locate your Codex plugins directory (configuration depends on your setup)
-3. Copy the repository folder to your plugins directory
-4. Register the skill with Codex using your tool's registration method
-5. Use commands like: `ShipLift Quarter`
-
-**Official Reference:** Check your OpenAI Codex documentation for skill/plugin installation
-
-### For Cursor
-
-1. Clone this repository: `https://github.com/bishoy-bishai/ShipLift`
-2. Locate your Cursor skills directory:
-   - Typically: `~/.cursor/skills/` or check Cursor settings
-3. Copy the repository folder to your skills directory
-4. Restart Cursor
-5. Use commands like: `ShipLift Quarter`
-
-**Official Reference:** [Cursor Skills Documentation](https://docs.cursor.com)
-
-### For Google Antigravity
-
-1. Clone this repository: `https://github.com/bishoy-bishai/ShipLift`
-2. Follow your Antigravity agent setup for importing skills
-3. Point Antigravity to the ShipLift repository location
-4. Register the skill with your Antigravity configuration
-5. Use commands like: `ShipLift Quarter`
-
-**Official Reference:** Google Antigravity documentation (consult official Google AI agent docs)
-
-### Manual Usage (No Coding Agent)
-
-You can use ShipLift manually without an agent:
-
-1. Read [SKILL.md](SKILL.md) for the framework
-2. Analyze your repository against the rules in `references/`
-3. Group your work using [intelligence-rules.md](references/intelligence-rules.md)
-4. Rank using the [impact-engine.md](references/impact-engine.md)
-5. Generate achievements using [output-templates.md](references/output-templates.md)
-6. Validate against [VALIDATION.md](VALIDATION.md)
-
----
-
-## Manual Usage
-
----
-
-## Validation
-
-ShipLift has been validated against 12 acceptance tests covering:
-
-- ✅ Evidence hierarchy enforcement
-- ✅ No invented metrics
-- ✅ No invented business impact
-- ✅ Proper language standards
-- ✅ Correct grouping patterns
-- ✅ Impact-focused output
-- ✅ Metric accuracy
-- ✅ Appropriate achievement counts
-- ✅ Proper standup formatting
-- ✅ Evidence confidence assessment
-- ✅ Title quality standards
-- ✅ No padding to hit targets
-
-See `VALIDATION.md` for full test suite.
-
----
-
-## When to Use ShipLift
-
-### Perfect For
-
-- ✅ Quarterly review of your accomplishments
-- ✅ Preparing for performance reviews
-- ✅ Updating your resume or portfolio
-- ✅ Preparing manager 1:1 talking points
-- ✅ Understanding what you actually accomplished
-- ✅ Communicating impact to non-technical stakeholders
-
-### Not Ideal For
-
-- ❌ Commit history (use `git log` instead)
-- ❌ Code review (use GitHub/GitLab)
-- ❌ Time tracking (use time tracking tools)
-- ❌ Task management (use project management tools)
-
----
-
-## Support & Questions
-
-### Understanding the Rules
-
-1. Read `SKILL.md` for overview
-2. Study `references/` files relevant to your question
-3. Check `VALIDATION.md` for examples
-4. Review `output-templates.md` for formatting
-
-### Troubleshooting
-
-**Issue: ShipLift seems to be missing work**
-
-→ Verify work is:
-- Merged to main branch
-- Has supporting commits
-- Has PR/issue context
-- Has evidence in diffs
-
-**Issue: Achievement seems overblown**
-
-→ Review `anti-bs-rules.md` and reduce claims.
-
-**Issue: Metrics don't seem right**
-
-→ Verify calculations in `metrics.md`.
-
----
-
-## Files Overview
-
-| File | Purpose |
-|------|---------|
-| SKILL.md | High-level overview (start here) |
-| README.md | This file - installation and usage |
-| VALIDATION.md | Acceptance criteria and test suite |
-| achievement-framework.md | How to group and cluster work |
-| commands.md | Command specifications |
-| evidence-matrix.md | Evidence hierarchy and validation |
-| impact-engine.md | Ranking and prioritization framework |
-| intelligence-rules.md | Work pattern recognition |
-| anti-bs-rules.md | Mandatory guardrails |
-| metrics.md | Metric calculations |
-| output-templates.md | Output formatting |
-| goals-engine.md | SMART goals, mapping, progress |
-| career-evidence-engine.md | CV aggregation, evidence strength, role modes |
-| pulse-engine.md | Pulse evidence model, question flow, storage rules |
-| git-analysis.sh | Repository snapshot helper |
-| pulse-store.sh / pulse_store.py | Pulse EvidenceStore CLI and implementation |
-
----
-
-## The Final Principle
-
-> **Do not make the work sound bigger. Make the value of the work clearer.**
-
-Every achievement should answer: **Why did this work matter?**
-
----
-
-## License & Attribution
-
-ShipLift is an AI agent skill designed for use with coding agents like Claude Code and OpenAI Codex.
-
-Designed by engineering leaders who believe that engineering impact should be clear, honest, and evidence-driven.
-
----
-
-## Questions?
-
-If you have questions about how ShipLift works:
-
-1. Check the relevant `references/` file
-2. Review examples in `output-templates.md`
-3. Test against cases in `VALIDATION.md`
-4. Refer back to `SKILL.md` for principles
-
-The documentation is comprehensive. If something seems unclear, the answer is usually in one of the reference files.
+> **Make your real work visible.**

@@ -15,6 +15,7 @@ Analyze the **current calendar quarter** and identify the strongest achievements
 - Current repository
 - Current calendar quarter
 - Full Git history for the quarter
+- Pulse evidence recorded for the quarter (`pulse-store.sh by-quarter`), if any
 
 ### Output
 
@@ -35,13 +36,39 @@ If the repository only supports 4 meaningful achievements, return 4.
 
 ### Process
 
-1. **Analyze** all commits and PRs from the current quarter
-2. **Extract** work units using Git Intelligence rules
-3. **Build** evidence matrix for each work unit
-4. **Cluster** related work into achievements
-5. **Rank** achievements using Impact Engine
-6. **Select** top 5-7 by score
-7. **Generate** final achievements with supporting points
+1. **Analyze** all commits and PRs from the current quarter, plus Pulse evidence for the same quarter
+2. **Extract** work units using Git Intelligence rules; Pulse items are already structured evidence
+3. **Link** related Git and Pulse evidence via the [Evidence Engine](core/evidence-engine.md) (`evidence-engine.sh find-related`) — see [Evidence Linking](core/evidence-linking.md)
+4. **Build** evidence matrix for each work unit, rating [Evidence Strength](core/evidence-strength.md) and [Impact](core/impact-analysis.md) per group
+5. **Cluster** related work into achievements
+6. **Rank** achievements using Impact Engine
+7. **Validate** against [Anti-Inflation](core/anti-inflation.md) (`evidence-engine.sh lint`) and [Anti-BS Rules](anti-bs-rules.md)
+8. **Select** top 5-7 by score
+9. **Generate** final achievements with supporting points
+10. **Check** for open threads (see Quarter Closure Intelligence, below)
+
+### Quarter Closure Intelligence
+
+Some evidence describes work that started but whose outcome was never recorded — most often an `Investigation`, `Initiative`, or `Incident Response` Pulse item with no later evidence of resolution.
+
+```
+Pulse (earlier in the quarter):
+Started investigating Cypress instability.
+
+No later evidence of a fix or conclusion.
+→ Open Thread
+```
+
+When `evidence-engine.sh open-threads --company ID --quarter YYYY-QN` reports an open thread, ask a short, specific follow-up as part of the Quarter conversation:
+
+```
+You started investigating Cypress instability earlier this quarter.
+Did this lead to a fix or conclusion?
+```
+
+If the user answers with a resolution, record it (link the new evidence, or mark the original resolved) so the chain becomes `Investigation → Resolution → Impact` instead of being lost. If the user says they don't know or it's still open, leave it as an open thread — do not invent a resolution.
+
+This is internal logic inside `ShipLift Quarter`, not a new user-facing command.
 
 ### Example Output
 
@@ -90,6 +117,7 @@ Analyze recent repository activity and prepare concise standup update.
 - Current repository
 - Last 1-3 weeks of Git history (configurable)
 - Branch/PR information
+- Recent Pulse evidence for the same window (`pulse-store.sh recent`)
 
 ### Output
 
@@ -107,20 +135,20 @@ Blockers
 - Meetings or conversations
 - Plans not evidenced by branches/PRs
 - Blockers not evidenced by Git or issue tracking
-- Work not provable by Git history
+- Work not provable by Git history or recorded Pulse evidence
 - Speculative next steps
 
-Only report what Git can prove.
+Only report what Git can prove, plus what the user actually recorded via Pulse — never upgrade a Pulse fact into a bigger claim (see [Anti-Inflation](core/anti-inflation.md)).
 
 ### Process
 
-1. **Collect** recent commits, PRs, and branches
-2. **Group** by work unit (PR, issue, feature branch)
+1. **Collect** recent commits, PRs, branches, and recent Pulse evidence
+2. **Group** by work unit (PR, issue, feature branch, or Pulse category)
 3. **Categorize** as:
    - Merged/completed (Done)
    - In progress (Next)
    - Blocked/waiting (Blockers)
-4. **Describe** in natural language
+4. **Describe** in natural language, blending Git and Pulse evidence into one narrative rather than listing them as separate sources
 5. **Output** in standup format
 
 ### Example Output
@@ -163,6 +191,7 @@ Prepare comprehensive talking points for a manager 1:1 meeting.
 - Current repository
 - Specified time period (default: last month)
 - Any linked issues/projects
+- Pulse evidence, signals, and blind spots for the period (see [Evidence Engine](core/evidence-engine.md))
 
 ### Output
 
@@ -200,13 +229,14 @@ Only report what can be proven.
 
 ### Process
 
-1. **Analyze** achievements from specified period
+1. **Analyze** achievements from specified period, including Pulse-supported achievements
 2. **Identify** delivery outcomes
 3. **Extract** measurable impact
 4. **Note** technical challenges faced
 5. **Identify** growth areas and learning
-6. **Suggest** discussion topics based on evidence
-7. **Output** in 1:1 format
+6. **Check** [signals](core/signal-detection.md) and [blind spots](core/blind-spots.md) for additional, evidence-backed discussion material (phrased as evidence gaps, never as "you didn't do X")
+7. **Suggest** discussion topics based on evidence
+8. **Output** in 1:1 format
 
 ### Example Output
 
@@ -283,7 +313,7 @@ See [Output Templates](output-templates.md) for the exact format.
 ### Process
 
 1. **Parse** input mode (goals only / goals+achievements / single goal / none)
-2. **If no achievements provided**, reuse the most recent `ShipLift Quarter` output, or run the Quarter pipeline to generate candidates
+2. **If no achievements provided**, reuse the most recent `ShipLift Quarter` output, or run the Quarter pipeline (Git + Pulse evidence via the [Evidence Engine](core/evidence-engine.md)) to generate candidates
 3. **If no goals provided**, identify recurring themes across achievements and produce 2-4 labeled **Suggested Goals**, then stop and ask for confirmation
 4. **Validate** each goal against SMART (Specific, Measurable, Achievable, Relevant, Time-bound), using `✓ / ✗ / ?`
 5. **Suggest** an improved goal version when useful (using placeholders for any missing baseline/target, never invented numbers)
@@ -396,8 +426,8 @@ ShipLift CV Lead
 
 ### Process
 
-1. **Run** the standard Git Intelligence / Evidence Matrix / Achievement Engine pipeline over the requested time range (reusing the Quarter pipeline, not reimplementing it)
-2. **Aggregate** achievements across time into higher-level engineering stories (see [Career Evidence Engine](career-evidence-engine.md) §4)
+1. **Run** the standard Git Intelligence / Evidence Matrix / Achievement Engine pipeline over the requested time range, including Pulse evidence in that range (reusing the Quarter pipeline and [Evidence Engine](core/evidence-engine.md), not reimplementing it)
+2. **Aggregate** achievements across time into higher-level engineering stories (see [Career Evidence Engine](career-evidence-engine.md) §4), using [Evidence Strength](core/evidence-strength.md) ratings from either source equally
 3. **Rate** each candidate story's evidence strength (Strong / Medium / Weak)
 4. **Filter** out Weak-evidence stories from the default output
 5. **Rank** remaining stories by impact, evidence strength, complexity, scope, ownership, measurability, relevance, uniqueness

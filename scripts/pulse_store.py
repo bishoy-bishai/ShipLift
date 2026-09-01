@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-ShipLift Pulse — EvidenceStore
+ShipLift EvidenceStore
 
-A small, dependency-free local JSON store for Pulse evidence (the Human
-Work Evidence Engine). This script is a storage abstraction only — it does
-NOT decide what counts as evidence, generate achievements, or interpret
-impact. That logic lives in the agent, guided by references/pulse-engine.md.
+A small, dependency-free local JSON store for ShipLift evidence. It was
+introduced for Pulse (Human Evidence) and is now the shared store for
+every evidence source (Git, Pulse, and future integrations) — see
+references/core/evidence-engine.md for the unified evidence model this
+implements. This script is a storage abstraction only — it does NOT
+decide what counts as evidence, link evidence, generate achievements, or
+interpret impact. That logic lives in scripts/evidence_engine.py and the
+agent, guided by references/pulse-engine.md and references/core/*.md.
 
 Storage layout (MVP implementation — JSONStore):
 
@@ -20,18 +24,28 @@ Usage:
     pulse_store.py add --company ID --category CAT --description TEXT
                         [--work-date YYYY-MM-DD] [--source user]
                         [--confidence High|Medium|Low] [--metadata JSON]
+                        [--links JSON-array-of-ids]
     pulse_store.py check-duplicate --company ID --description TEXT [--category CAT]
     pulse_store.py update --company ID --id ID [--description TEXT]
                         [--metadata JSON] [--confidence High|Medium|Low]
+    pulse_store.py link --company ID --id ID --to ID [--reason TEXT]
     pulse_store.py list --company ID [--category CAT] [--since YYYY-MM-DD]
-                        [--until YYYY-MM-DD] [--date YYYY-MM-DD]
+                        [--until YYYY-MM-DD] [--date YYYY-MM-DD] [--source SRC]
     pulse_store.py recent --company ID [--days N]
     pulse_store.py by-quarter --company ID --quarter YYYY-QN
     pulse_store.py companies [--home PATH]
 
 All output is JSON on stdout so the calling agent can parse it.
-Raw Pulse text is stored locally only — never printed to logs beyond
+Raw evidence text is stored locally only — never printed to logs beyond
 this store's own JSON output, and never uploaded anywhere.
+
+Category validation: the Pulse category list (VALID_CATEGORIES) is
+enforced for source="user" evidence, since that list is part of the
+Pulse contract (references/pulse-engine.md §4). Other sources (e.g.
+"git") may use their own category vocabulary (see
+references/core/evidence-engine.md) and are not forced into the Pulse
+list — this store only checks that a category is a non-empty string
+for non-user sources.
 """
 
 import argparse
@@ -148,10 +162,16 @@ def cmd_check_duplicate(args):
 
 
 def cmd_add(args):
-    if args.category not in VALID_CATEGORIES:
+    source = args.source or "user"
+
+    if source == "user" and args.category not in VALID_CATEGORIES:
         print(json.dumps({"error": f"invalid category: {args.category}",
                            "valid_categories": sorted(VALID_CATEGORIES)}))
         sys.exit(1)
+    if not args.category or not args.category.strip():
+        print(json.dumps({"error": "category must not be empty"}))
+        sys.exit(1)
+
     confidence = args.confidence or "High"
     if confidence not in VALID_CONFIDENCE:
         print(json.dumps({"error": f"invalid confidence: {confidence}"}))
@@ -167,6 +187,14 @@ def cmd_add(args):
             print(json.dumps({"error": "metadata must be valid JSON"}))
             sys.exit(1)
 
+    links = []
+    if args.links:
+        try:
+            links = json.loads(args.links)
+        except json.JSONDecodeError:
+            print(json.dumps({"error": "links must be a valid JSON array of ids"}))
+            sys.exit(1)
+
     work_date = args.work_date or datetime.now().strftime("%Y-%m-%d")
 
     item = {
@@ -176,15 +204,41 @@ def cmd_add(args):
         "company": args.company,
         "category": args.category,
         "description": args.description,
-        "source": args.source or "user",
+        "source": source,
         "confidence": confidence,
         "metadata": metadata,
         "impact": "Unknown",
+        "links": links,
     }
 
     items.append(item)
     save_evidence(args, items)
     print(json.dumps({"ok": True, "item": item}, indent=2))
+
+
+def cmd_link(args):
+    items = load_evidence(args)
+    by_id = {i["id"]: i for i in items}
+    if args.id not in by_id:
+        print(json.dumps({"error": f"no evidence found with id {args.id}"}))
+        sys.exit(1)
+    if args.to not in by_id:
+        print(json.dumps({"error": f"no evidence found with id {args.to}"}))
+        sys.exit(1)
+    if args.id == args.to:
+        print(json.dumps({"error": "cannot link evidence to itself"}))
+        sys.exit(1)
+
+    a, b = by_id[args.id], by_id[args.to]
+    a.setdefault("links", [])
+    b.setdefault("links", [])
+    if args.to not in a["links"]:
+        a["links"].append(args.to)
+    if args.id not in b["links"]:
+        b["links"].append(args.id)
+
+    save_evidence(args, items)
+    print(json.dumps({"ok": True, "linked": [args.id, args.to], "reason": args.reason}, indent=2))
 
 
 def cmd_update(args):
@@ -222,6 +276,8 @@ def cmd_list(args):
     result = items
     if args.category:
         result = [i for i in result if i.get("category") == args.category]
+    if getattr(args, "source", None):
+        result = [i for i in result if i.get("source") == args.source]
     if args.date:
         result = [i for i in result if i.get("date") == args.date]
     if args.since:
@@ -299,7 +355,15 @@ def build_parser():
     sp.add_argument("--source", default="user")
     sp.add_argument("--confidence")
     sp.add_argument("--metadata")
+    sp.add_argument("--links")
     sp.set_defaults(func=cmd_add)
+
+    sp = sub.add_parser("link")
+    sp.add_argument("--company", required=True)
+    sp.add_argument("--id", required=True)
+    sp.add_argument("--to", required=True)
+    sp.add_argument("--reason")
+    sp.set_defaults(func=cmd_link)
 
     sp = sub.add_parser("check-duplicate")
     sp.add_argument("--company", required=True)
@@ -321,6 +385,7 @@ def build_parser():
     sp.add_argument("--date")
     sp.add_argument("--since")
     sp.add_argument("--until")
+    sp.add_argument("--source")
     sp.set_defaults(func=cmd_list)
 
     sp = sub.add_parser("recent")
