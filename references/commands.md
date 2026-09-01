@@ -449,6 +449,103 @@ See [Career Evidence Engine](career-evidence-engine.md) §19 for the full checkl
 
 ---
 
+## Command: ShipLift Pulse
+
+### Purpose
+
+Capture meaningful human work that Git cannot see — collaboration, mentoring, code review, technical decisions, investigations, initiatives, unblocking, and anything else that wouldn't show up in a commit — through a short, adaptive Q&A. Answers: **What did I contribute that Git cannot see?**
+
+### Input
+
+A short interactive conversation. No structured input required from the user beyond natural-language answers.
+
+### Output
+
+1. A concise, grouped summary of what was captured (see [Output Templates](output-templates.md)), or "No additional evidence captured." if nothing new came up.
+2. Evidence persisted locally via the EvidenceStore (`scripts/pulse-store.sh`), isolated by company.
+
+### Question Flow
+
+1. `What did you work on yesterday?` (opening question — never "What did you accomplish?")
+2. Adaptive branches, asked only where relevant:
+   - Collaboration
+   - Code Review
+   - Initiative
+   - Technical Decisions
+   - Unblocking
+   - Investigation
+3. `Is there anything important you did yesterday that wouldn't show up in Git?` (always asked last)
+
+Full question text, branching logic, and adaptive rules: [Pulse Engine §7](pulse-engine.md#7-the-question-flow).
+
+### Adaptive Behavior
+
+- Skip branches already answered by an earlier response (e.g. the opening answer already mentions "reviewed 3 PRs").
+- Accept natural answers (`yes`, `no`, `not sure`, `nothing`, `skip`, or free text) without forcing structured input.
+- "Not sure" and "nothing" are valid, final answers — never re-ask to manufacture an achievement.
+- Target session length: 30–90 seconds for a normal day.
+
+### Process
+
+1. **Ask** the opening question and adapt the remaining branches based on the answer
+2. **Record** each meaningful answer as a structured evidence item (category, description, source `user`, confidence, metadata) — never as an achievement or impact claim
+3. **Check** for likely duplicates before saving (`pulse-store.sh check-duplicate`)
+4. **Ask** the non-Git catch-all question last
+5. **Summarize** what was captured, grouped by category
+6. **Ask** "Anything else?" and confirm with "Pulse saved." (or the no-evidence message)
+7. **Persist** via the EvidenceStore, scoped to the correct company
+
+Full evidence model, categories, confidence rules, and storage details: [Pulse Engine](pulse-engine.md).
+
+### Important Constraints
+
+**Do NOT:**
+- ask "What did you accomplish today?" as the opening question
+- force every branch every day
+- pressure "not sure" or "nothing" into a manufactured achievement
+- upgrade a user's factual statement into a bigger claim ("reviewed 3 PRs" → "improved team productivity")
+- invent a metric, category, or impact the user didn't state
+- store evidence inside the project repository, or mix evidence across companies
+- upload or sync evidence anywhere without explicit user opt-in
+
+### Example Output
+
+```
+📝 Pulse captured
+
+🤝 Collaboration
+Helped a teammate resolve a React rendering issue.
+
+👀 Code Review
+Reviewed 3 PRs and identified a validation issue.
+
+🔍 Investigation
+Started investigating Cypress test instability.
+```
+
+### Integrations
+
+- **Standup:** recent Pulse evidence may be combined with Git evidence in `Done / Next / Blockers`
+- **Quarter:** Pulse evidence for the quarter feeds the same Achievement Engine as Git evidence
+- **Goals:** Pulse evidence may support goal evidence (not proof of completion)
+- **CV:** Pulse evidence may support CV bullets when it meets the same evidence-strength bar as Git evidence
+- **1:1:** Pulse evidence may surface as discussion-ready talking points
+
+See [Pulse Engine §16](pulse-engine.md#16-integration-rules) for the full integration rules.
+
+### Validation
+
+- [ ] Opening question is concrete, not "What did you accomplish?"
+- [ ] Irrelevant branches are skipped, not forced
+- [ ] "Not sure" / "nothing" are accepted without pressure
+- [ ] Every captured item has a category, description, source `user`, and confidence
+- [ ] No claim exceeds what the user actually said
+- [ ] Duplicate check runs before saving
+- [ ] Evidence is isolated by company and stored under `~/.shiplift/`, never in the repository
+- [ ] Summary is concise and ends with "Anything else?"
+
+---
+
 ## Command Variations
 
 ### Variations by Time Period
@@ -485,6 +582,16 @@ ShipLift CV last 2 years
 ShipLift CV <company>
 ShipLift CV Senior
 ShipLift CV Lead
+```
+
+**Pulse:**
+```
+ShipLift Pulse                              (default: yesterday)
+ShipLift Pulse today
+ShipLift Pulse 2026-08-31
+
+ShipLift Pulse
+Actually, yesterday I didn't review 3 PRs. It was 2.       (correction)
 ```
 
 ### Variations by Branch/Project

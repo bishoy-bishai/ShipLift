@@ -12,11 +12,11 @@ description: Analyze a software repository and turn shipped engineering work int
 ShipLift bridges the gap between raw engineering activity and meaningful communication. It operates at one or two levels above implementation, while remaining completely truthful and evidence-driven.
 
 ```
-Repository
-    ↓
-Repository Analysis
-    ↓
-Git Intelligence
+Repository                    ShipLift Pulse (adaptive Q&A)
+    ↓                                 ↓
+Repository Analysis          Raw Evidence (EvidenceStore)
+    ↓                                 │
+Git Intelligence  ←───────────────────┘
     ↓
 Evidence Matrix
     ↓
@@ -32,6 +32,33 @@ Command Output
 ```
 
 ## Supported Commands
+
+### ShipLift Pulse
+
+Answers: **What did I contribute that Git cannot see?**
+
+Pulse is the **Human Work Evidence Engine**. It runs a short, adaptive Q&A (30–90 seconds) to capture collaboration, mentoring, code review, technical decisions, investigations, initiatives, and unblocking — the meaningful work that never becomes a commit.
+
+```
+What did you work on yesterday?
+      ↓
+Adaptive follow-up questions
+      ↓
+Raw Evidence (facts, not achievements)
+      ↓
+Stored locally, isolated by company
+```
+
+Pulse captures facts, not achievements. `Impact: Unknown` unless the user gave real evidence of outcome. Feeds Standup, Quarter, Goals, CV, and 1:1 as a second evidence source alongside Git — it is never a separate silo.
+
+**Do not invent:**
+- impact, percentages, or outcomes the user didn't state
+- categories or metrics beyond what was said
+- achievements — that's the Achievement Engine's job, not Pulse's
+
+Full rules: [Pulse Engine](references/pulse-engine.md)
+
+---
 
 ### ShipLift Quarter
 Analyze the current calendar quarter. Returns the strongest **5–7 achievements** (or fewer if only fewer meaningful achievements exist).
@@ -246,12 +273,13 @@ See detailed documentation in the `references/` folder:
 - [Output Templates](references/output-templates.md) — Command output formats
 - [Goals Engine](references/goals-engine.md) — SMART goals, achievement mapping, progress, and gaps for `ShipLift Goals`
 - [Career Evidence Engine](references/career-evidence-engine.md) — Career aggregation, evidence strength, and role modes for `ShipLift CV`
+- [Pulse Engine](references/pulse-engine.md) — Evidence model, question flow, and storage rules for `ShipLift Pulse`
 
 ---
 
 ## How to Use ShipLift in a Coding Agent
 
-1. **Invoke** the skill with a command: `ShipLift Quarter`, `ShipLift Standup`, `ShipLift 1:1`, `ShipLift Goals`, or `ShipLift CV`
+1. **Invoke** the skill with a command: `ShipLift Pulse`, `ShipLift Quarter`, `ShipLift Standup`, `ShipLift 1:1`, `ShipLift Goals`, or `ShipLift CV`
 2. **Analyze** the repository using the Git Intelligence rules
 3. **Build** an evidence matrix of changes
 4. **Group** related work using clustering rules
@@ -497,9 +525,12 @@ shiplift/
 │   ├── metrics.md
 │   ├── output-templates.md
 │   ├── goals-engine.md
-│   └── career-evidence-engine.md
+│   ├── career-evidence-engine.md
+│   └── pulse-engine.md
 └── scripts/
-    └── git-analysis.sh
+    ├── git-analysis.sh
+    ├── pulse-store.sh
+    └── pulse_store.py
 ```
 
 ---
@@ -526,6 +557,7 @@ The full ShipLift command set:
 ```
 🚀 ShipLift
 
+ShipLift Pulse     — "What did I contribute that Git can't see?"
 ShipLift Quarter   — "What did I accomplish?"
 ShipLift Goals     — "How did my work move my goals?"
 ShipLift Standup   — "What do I say today?"

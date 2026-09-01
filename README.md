@@ -12,6 +12,7 @@ ShipLift analyzes your repository and converts raw engineering activity into cle
 
 1. Copy the `shiplift/` directory to your skills directory
 2. Use one of the commands:
+   - `ShipLift Pulse` - Capture the work Git can't see (30–90 second Q&A)
    - `ShipLift Quarter` - Analyze current quarter (5-7 achievements)
    - `ShipLift Goals` - Map achievements to your professional goals
    - `ShipLift Standup` - Prepare standup update
@@ -21,6 +22,8 @@ ShipLift analyzes your repository and converts raw engineering activity into cle
 ### Example Usage
 
 ```
+ShipLift Pulse
+
 ShipLift Quarter
 
 ShipLift Goals
@@ -67,6 +70,53 @@ Every claim must be backed by evidence. Every metric must be calculated correctl
 ---
 
 ## Commands
+
+### ShipLift Pulse
+
+Captures the work Git cannot see.
+
+ShipLift bridges the gap between raw engineering activity and meaningful communication — but Git only sees code. Pulse fills the blind spot: who you helped, what you reviewed, what you decided, what you investigated, what you unblocked, and anything else that never became a commit.
+
+It's a short, adaptive conversation — not a report you have to write:
+
+```
+ShipLift Pulse
+```
+
+```
+Did you help anyone yesterday?
+Did you review someone else's code?
+Did you make or influence a technical decision?
+Did you start an investigation or initiative?
+Did you unblock anything?
+Did you do anything important that wouldn't show up in Git?
+```
+
+Pulse is:
+- **Short** — 30–90 seconds for a normal day
+- **Adaptive** — skips questions your earlier answers already covered
+- **Evidence-based** — records what you actually said, never invents impact
+- **Local-first** — stored under `~/.shiplift/`, never in the repository, never uploaded
+- **Integrated** — feeds Standup, Quarter, Goals, CV, and 1:1 as a second evidence source alongside Git
+
+"Not sure" and "nothing" are valid answers — Pulse never pressures you into manufacturing an achievement.
+
+**Example:**
+
+```
+📝 Pulse captured
+
+🤝 Collaboration
+Helped a teammate resolve a React rendering issue.
+
+👀 Code Review
+Reviewed 3 PRs and identified a validation issue.
+
+🔍 Investigation
+Started investigating Cypress test instability.
+```
+
+See [references/pulse-engine.md](references/pulse-engine.md) for the full evidence model, question flow, and storage rules.
 
 ### ShipLift Quarter
 
@@ -294,9 +344,12 @@ shiplift/
 │   ├── metrics.md                    (Metric calculation)
 │   ├── output-templates.md           (Output formatting)
 │   ├── goals-engine.md               (SMART goals, mapping, progress)
-│   └── career-evidence-engine.md     (CV aggregation, evidence strength, role modes)
+│   ├── career-evidence-engine.md     (CV aggregation, evidence strength, role modes)
+│   └── pulse-engine.md               (Pulse evidence model, question flow, storage)
 └── scripts/
-    └── git-analysis.sh               (Helper script)
+    ├── git-analysis.sh               (Helper script)
+    ├── pulse-store.sh                (Pulse EvidenceStore CLI)
+    └── pulse_store.py                (Pulse EvidenceStore implementation)
 ```
 
 ### Core Components
@@ -388,6 +441,9 @@ Templates and examples for generating achievement text.
 - Metric formatting
 - Common examples
 
+#### 11. Pulse Engine
+Rules for the adaptive Q&A, evidence model, categories, confidence, duplicate detection, company isolation, and local storage behind `ShipLift Pulse`.
+
 ### Helper Script
 
 **`scripts/git-analysis.sh`**
@@ -402,6 +458,25 @@ Provides repository snapshots to assist analysis:
 ./git-analysis.sh stats               # Repo statistics
 ./git-analysis.sh diff HEAD~1 HEAD    # Compare commits
 ```
+
+**`scripts/pulse-store.sh`**
+
+The local `EvidenceStore` behind `ShipLift Pulse` — stores and retrieves evidence under `~/.shiplift/`, isolated by company:
+
+```bash
+./pulse-store.sh init --company acme
+./pulse-store.sh add --company acme --category "Collaboration" \
+    --description "Helped a teammate fix a rendering issue." \
+    --work-date 2026-08-31
+./pulse-store.sh check-duplicate --company acme --description "..."
+./pulse-store.sh update --company acme --id <id> --description "..."
+./pulse-store.sh list --company acme --category "Code Review"
+./pulse-store.sh recent --company acme --days 7
+./pulse-store.sh by-quarter --company acme --quarter 2026-Q3
+./pulse-store.sh companies
+```
+
+Run `./scripts/test-pulse-store.sh` to exercise the store's test suite.
 
 ---
 
@@ -680,7 +755,9 @@ See `VALIDATION.md` for full test suite.
 | output-templates.md | Output formatting |
 | goals-engine.md | SMART goals, mapping, progress |
 | career-evidence-engine.md | CV aggregation, evidence strength, role modes |
+| pulse-engine.md | Pulse evidence model, question flow, storage rules |
 | git-analysis.sh | Repository snapshot helper |
+| pulse-store.sh / pulse_store.py | Pulse EvidenceStore CLI and implementation |
 
 ---
 

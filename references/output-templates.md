@@ -271,6 +271,86 @@ See [Career Evidence Engine](career-evidence-engine.md) for the full aggregation
 
 ---
 
+## Pulse Summary Template
+
+### Full Structure
+
+```
+📝 Pulse captured
+
+🤝 Collaboration
+[Plain factual restatement of what the user said]
+
+👀 Code Review
+[Plain factual restatement, with count if given]
+
+🔍 Investigation
+[Plain factual restatement]
+
+🚀 Initiative
+[Plain factual restatement]
+```
+
+Use one emoji-labeled block per category actually captured — omit categories with nothing to report. Suggested emoji per category:
+
+```
+🤝 Collaboration            🧑‍🏫 Mentoring
+👀 Code Review              🧭 Technical Decision
+🔍 Investigation            🚀 Initiative
+🚨 Incident Response        📄 Documentation
+📚 Knowledge Sharing        🗓️ Planning
+💬 Communication            🧩 Problem Solving
+🔓 Unblocking                🔧 Process Improvement
+📌 Other
+```
+
+After the summary, always ask:
+
+```
+Anything else?
+```
+
+Then close with one of:
+
+```
+Pulse saved.
+```
+
+```
+No additional evidence captured.
+```
+
+### No Evidence Example
+
+```
+No additional evidence captured.
+```
+
+This is a complete, valid Pulse output when the user answered "nothing" or "not sure" throughout — do not manufacture evidence to avoid this outcome.
+
+### Duplicate Prompt Example
+
+```
+This looks similar to an existing entry:
+"Helped Ahmed fix a React rendering issue." (2026-08-31)
+
+Add as a new contribution or update the existing one?
+```
+
+### Metadata
+
+Add at the top when useful:
+
+```
+**Work Date:** [Date]
+**Captured:** [Date]
+**Company:** [Company/project]
+```
+
+See [Pulse Engine](pulse-engine.md) for the full evidence model, question flow, and anti-BS rules behind this output.
+
+---
+
 ## Common Patterns for Points
 
 ### Measuring Implementation
