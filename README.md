@@ -32,7 +32,7 @@ ShipLift follows the **Agent Skills** standard (a plain `SKILL.md` at the reposi
 
 ## Recommended — Skills CLI
 
-The easiest way to install ShipLift is using `npx skills`.
+The easiest way to install ShipLift is using `npx skills`. ✅ Every command in this section was smoke-tested against the live `bishoy-bishai/ShipLift` repository.
 
 ### Install ShipLift
 
@@ -103,7 +103,7 @@ npx skills add bishoy-bishai/ShipLift \
 
 ## GitHub CLI
 
-If you use GitHub CLI, you can install ShipLift with `gh skill install`.
+If you use GitHub CLI (v2.90.0+), you can install ShipLift with `gh skill install`. ⚠️ This syntax is verified against GitHub's official `gh skill` documentation; it has not been smoke-tested from this environment (`gh` is not installed here). Run `gh --version` first to confirm you have v2.90.0 or later.
 
 ### Claude Code
 
@@ -147,6 +147,8 @@ ShipLift also ships a `.claude-plugin/marketplace.json`, so Claude Code can add 
 /plugin marketplace add bishoy-bishai/ShipLift
 /plugin install shiplift@shiplift
 ```
+
+✅ Smoke-tested end-to-end (`claude plugin marketplace add`, `claude plugin install`, `claude plugin details`) against this repository — installs cleanly as a single `shiplift` skill, ~98 tokens always-on.
 
 This is the Claude Code–specific path — the Skills CLI and GitHub CLI methods above work across every supported agent, including Claude Code.
 

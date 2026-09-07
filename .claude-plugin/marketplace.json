@@ -1,5 +1,6 @@
 {
   "name": "shiplift",
+  "description": "ShipLift: evidence-based engineering achievements, standups, 1:1 prep, goals, and CV contributions from your Git history.",
   "owner": {
     "name": "Bishoy Bishai",
     "url": "https://github.com/bishoy-bishai"
