@@ -9,7 +9,7 @@ description: |
   business impact, or leadership claims.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # ShipLift: Transform Engineering Work into Meaningful Achievements

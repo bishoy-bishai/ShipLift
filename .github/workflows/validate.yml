@@ -28,3 +28,6 @@ jobs:
 
       - name: Evidence Engine unit tests
         run: python3 scripts/test_evidence_engine.py
+
+      - name: Repository Index unit tests
+        run: python3 scripts/test_repo_index.py
