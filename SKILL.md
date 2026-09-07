@@ -324,6 +324,7 @@ See detailed documentation in the `references/` folder:
   - [Blind Spots](references/core/blind-spots.md)
   - [Anti-Inflation](references/core/anti-inflation.md)
   - [Writing Constitution](references/core/writing-constitution.md)
+  - [Humanization](references/core/humanization.md)
 
 ---
 
@@ -484,7 +485,11 @@ Before outputting, verify:
 
 If uncertain about a claim, remove it or rephrase with evidence.
 
-### 9. Format and Output
+### 9. Humanize
+
+Re-read each generated sentence against [Humanization](references/core/humanization.md) — fix only sentences that show a templated AI-writing pattern (fake contrasts, staged intros, dramatic conclusions, forced triads, inflated phrasing, excessive em dashes, repetitive structure). Leave sentences that already sound natural unchanged. A rewrite must never change a fact, number, date, URL, name, or technology already validated in steps 4-8 — if a fix would require that, skip the fix and keep the original sentence. `ShipLift Pulse` output is exempt (it's a factual restatement, not narrative prose — see Humanization §4).
+
+### 10. Format and Output
 
 **Quarter output:**
 ```
@@ -589,7 +594,8 @@ shiplift/
 │       ├── signal-detection.md
 │       ├── blind-spots.md
 │       ├── anti-inflation.md
-│       └── writing-constitution.md
+│       ├── writing-constitution.md
+│       └── humanization.md
 └── scripts/
     ├── git-analysis.sh               (repository snapshot helper)
     ├── pulse-store.sh                (Pulse EvidenceStore CLI)

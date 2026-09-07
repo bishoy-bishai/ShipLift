@@ -45,7 +45,8 @@ If the repository only supports 4 meaningful achievements, return 4.
 7. **Validate** against [Anti-Inflation](core/anti-inflation.md) (`evidence-engine.sh lint`) and [Anti-BS Rules](anti-bs-rules.md)
 8. **Select** top 5-7 by score
 9. **Generate** final achievements with supporting points
-10. **Check** for open threads (see Quarter Closure Intelligence, below)
+10. **Humanize** generated points against [Humanization](core/humanization.md) — fix only sentences matching a templated-AI pattern, never touching validated facts
+11. **Check** for open threads (see Quarter Closure Intelligence, below)
 
 ### Quarter Closure Intelligence
 
