@@ -4,6 +4,22 @@ This document defines acceptance criteria and validation tests for the ShipLift 
 
 ---
 
+## Structure Validation
+
+Run the automated structure check before any release:
+
+```bash
+python3 scripts/validate-skill.py
+```
+
+It verifies:
+
+- [ ] `SKILL.md` exists and has valid YAML frontmatter (`name`, `description`)
+- [ ] `.claude-plugin/plugin.json` exists and is valid JSON with required fields
+- [ ] `references/`, `references/core/`, and `scripts/` exist
+- [ ] Every relative link in `SKILL.md` and `references/**/*.md` resolves to a real file
+- [ ] No hard-coded local/personal file paths (`/Users/...`, `/home/...`) anywhere in the skill
+
 ## Validation Principles
 
 ShipLift must:

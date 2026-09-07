@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "shiplift",
+  "description": "Turn Git history into evidence-based engineering achievements, standups, 1:1 talking points, goals, and CV contributions.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Bishoy Bishai",
+    "url": "https://github.com/bishoy-bishai"
+  },
+  "homepage": "https://github.com/bishoy-bishai/ShipLift",
+  "repository": "https://github.com/bishoy-bishai/ShipLift",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "git",
+    "developer-productivity",
+    "performance-review",
+    "engineering-impact",
+    "career",
+    "standup",
+    "one-on-one",
+    "cv",
+    "goals"
+  ],
+  "skills": [
+    "./"
+  ]
+}

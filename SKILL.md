@@ -1,6 +1,15 @@
 ---
 name: shiplift
-description: Analyze a software repository and turn shipped engineering work into clear, evidence-based achievements, standup updates, and manager 1:1 talking points.
+description: |
+  Analyze a software repository and turn shipped engineering work into
+  clear, evidence-based achievements, standup updates, manager 1:1
+  talking points, professional goals, and CV contributions. Works on
+  any Git repository, in any language or framework. Every claim is
+  traced to Git or user-confirmed evidence — it never invents metrics,
+  business impact, or leadership claims.
+license: MIT
+metadata:
+  version: "1.0.0"
 ---
 
 # ShipLift: Transform Engineering Work into Meaningful Achievements
@@ -34,6 +43,33 @@ Git Evidence                  Human Evidence
 ```
 
 Git and Pulse are both first-class evidence sources feeding one shared Evidence Engine — see [Evidence Engine](references/core/evidence-engine.md). Commands are interfaces; the Evidence Engine is the brain behind all of them.
+
+## When to Use ShipLift
+
+Activate ShipLift whenever the user is trying to describe, summarize, or communicate their engineering work — not just when they type an explicit command. Typical situations:
+
+- Preparing for a quarterly or performance review
+- Writing a weekly status update or standup
+- Prepping for a manager 1:1
+- Preparing for a promotion case or self-evaluation
+- Updating a CV or resume with real engineering work
+- Career planning or setting professional goals
+- Understanding the impact of recent engineering work
+
+## Workflow Routing
+
+Explicit commands (`ShipLift Quarter`, `ShipLift Standup`, `ShipLift 1:1`, `ShipLift Goals`, `ShipLift CV`, `ShipLift Pulse`) always work directly. Also route natural-language requests to the matching workflow by intent, not by keyword match:
+
+| User says something like... | Route to |
+|---|---|
+| "What did I accomplish this quarter?" / "Analyze my work this quarter." | `ShipLift Quarter` |
+| "What did I work on this week?" / "What did I ship recently?" | `ShipLift Standup` |
+| "Prepare me for my 1:1." / "Help me talk to my manager." | `ShipLift 1:1` |
+| "How does my work map to my goals?" / "Am I on track for my goals?" | `ShipLift Goals` |
+| "Turn my work into CV bullets." / "What are my strongest achievements?" | `ShipLift CV` |
+| "Help me capture work that isn't in Git." / "I helped someone yesterday, log it." | `ShipLift Pulse` |
+
+If intent is ambiguous (e.g. "how am I doing?"), ask a brief clarifying question rather than guessing — do not silently default to one workflow.
 
 ## Supported Commands
 
@@ -527,7 +563,11 @@ See `VALIDATION.md` for acceptance criteria and test cases.
 
 ```
 shiplift/
+├── .claude-plugin/
+│   └── plugin.json                   (marketplace manifest)
 ├── SKILL.md                          (this file)
+├── README.md
+├── LICENSE
 ├── VALIDATION.md                     (acceptance criteria)
 ├── references/
 │   ├── achievement-framework.md
@@ -551,11 +591,14 @@ shiplift/
 │       ├── anti-inflation.md
 │       └── writing-constitution.md
 └── scripts/
-    ├── git-analysis.sh
-    ├── pulse-store.sh
+    ├── git-analysis.sh               (repository snapshot helper)
+    ├── pulse-store.sh                (Pulse EvidenceStore CLI)
     ├── pulse_store.py
-    ├── evidence-engine.sh
-    └── evidence_engine.py
+    ├── evidence-engine.sh            (Evidence Engine CLI)
+    ├── evidence_engine.py
+    ├── test-pulse-store.sh           (optional — test suite)
+    ├── test-evidence-engine.sh       (optional — test suite)
+    └── test_evidence_engine.py       (optional — test suite)
 ```
 
 ---

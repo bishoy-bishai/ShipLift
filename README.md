@@ -257,6 +257,32 @@ ShipLift CV
 
 ---
 
+# 💬 What You Can Ask
+
+ShipLift recognizes plain-English requests, not just explicit commands:
+
+```text
+Analyze my work this quarter.
+What did I accomplish this week?
+Prepare me for my 1:1.
+What are my strongest engineering achievements?
+Turn my work into CV bullets.
+How does my work map to my goals?
+```
+
+Explicit commands work too, and are equivalent:
+
+```text
+ShipLift Quarter
+ShipLift Standup
+ShipLift 1:1
+ShipLift Goals
+ShipLift CV
+ShipLift Pulse
+```
+
+---
+
 # 🧠 What ShipLift Does
 
 ShipLift analyzes your engineering work and turns it into meaningful career evidence.
@@ -704,27 +730,43 @@ Simple language wins.
 ```text
 ShipLift/
 │
+├── .claude-plugin/
+│   └── plugin.json
+│
 ├── SKILL.md
 ├── README.md
+├── LICENSE
 ├── VALIDATION.md
 │
 ├── references/
 │   ├── achievement-framework.md
+│   ├── anti-bs-rules.md
 │   ├── commands.md
 │   ├── evidence-matrix.md
 │   ├── impact-engine.md
 │   ├── intelligence-rules.md
-│   ├── anti-bs-rules.md
 │   ├── metrics.md
 │   ├── output-templates.md
 │   ├── goals-engine.md
 │   ├── career-evidence-engine.md
-│   └── pulse-engine.md
+│   ├── pulse-engine.md
+│   └── core/
+│       ├── evidence-engine.md
+│       ├── evidence-linking.md
+│       ├── evidence-strength.md
+│       ├── impact-analysis.md
+│       ├── signal-detection.md
+│       ├── blind-spots.md
+│       ├── anti-inflation.md
+│       └── writing-constitution.md
 │
 └── scripts/
     ├── git-analysis.sh
     ├── pulse-store.sh
-    └── pulse_store.py
+    ├── pulse_store.py
+    ├── evidence-engine.sh
+    ├── evidence_engine.py
+    └── validate-skill.py
 ```
 
 ---
