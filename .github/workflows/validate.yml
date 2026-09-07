@@ -1,0 +1,30 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Structure and security validation
+        run: python3 scripts/validate-skill.py
+
+      - name: Behavioral rule checks
+        run: python3 scripts/tests/test_behavioral_rules.py
+
+      - name: Evidence Engine test suite
+        run: bash scripts/test-evidence-engine.sh
+
+      - name: Pulse EvidenceStore test suite
+        run: bash scripts/test-pulse-store.sh
+
+      - name: Evidence Engine unit tests
+        run: python3 scripts/test_evidence_engine.py

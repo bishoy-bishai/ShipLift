@@ -21,7 +21,14 @@ ShipLift combines **code evidence** with **human evidence** — because Git can 
 
 # 🚀 Installation
 
-ShipLift follows the **Agent Skills** standard and can be installed into compatible AI coding agents.
+ShipLift follows the **Agent Skills** standard (a plain `SKILL.md` at the repository root) and can be installed into any compatible AI coding agent. It also ships a `.claude-plugin/` manifest for Claude Code's native plugin system specifically. Use whichever matches your agent:
+
+| Method | Best for |
+|---|---|
+| [Skills CLI](#recommended--skills-cli) (`npx skills`) | Any supported agent, cross-platform |
+| [GitHub CLI](#github-cli) (`gh skill install`) | Anyone already using `gh` |
+| [Claude Code plugin marketplace](#claude-code-plugin-marketplace) | Claude Code users who want native `/plugin` management |
+| [Manual installation](#-manual-installation) | Any agent, no extra tooling required |
 
 ## Recommended — Skills CLI
 
@@ -129,6 +136,19 @@ gh skill install bishoy-bishai/ShipLift \
   --agent antigravity \
   --scope user
 ```
+
+---
+
+## Claude Code Plugin Marketplace
+
+ShipLift also ships a `.claude-plugin/marketplace.json`, so Claude Code can add this repository directly as a plugin marketplace and install ShipLift as a native plugin:
+
+```text
+/plugin marketplace add bishoy-bishai/ShipLift
+/plugin install shiplift@shiplift
+```
+
+This is the Claude Code–specific path — the Skills CLI and GitHub CLI methods above work across every supported agent, including Claude Code.
 
 ---
 
@@ -731,7 +751,11 @@ Simple language wins.
 ShipLift/
 │
 ├── .claude-plugin/
-│   └── plugin.json
+│   ├── plugin.json          (Claude Code plugin manifest)
+│   └── marketplace.json     (lets this repo be added as a plugin marketplace)
+│
+├── .github/workflows/
+│   └── validate.yml         (CI: structure, security, and test validation)
 │
 ├── SKILL.md
 ├── README.md
@@ -761,13 +785,55 @@ ShipLift/
 │       └── writing-constitution.md
 │
 └── scripts/
-    ├── git-analysis.sh
-    ├── pulse-store.sh
+    ├── git-analysis.sh          (repository snapshot helper)
+    ├── pulse-store.sh           (Pulse EvidenceStore CLI)
     ├── pulse_store.py
-    ├── evidence-engine.sh
+    ├── evidence-engine.sh       (Evidence Engine CLI)
     ├── evidence_engine.py
-    └── validate-skill.py
+    ├── validate-skill.py        (structure / security validator)
+    └── tests/
+        └── test_behavioral_rules.py
 ```
+
+---
+
+# 🔒 Privacy & Security
+
+This section describes what the code actually does, not a marketing claim.
+
+**Where data lives:** Pulse evidence is stored as local JSON files under `~/.shiplift/companies/<company-id>/evidence.json` (see `scripts/pulse_store.py`). Nothing is written inside your project repository.
+
+**Network access:** none of the scripts in `scripts/` make network requests. There is no `curl`, `wget`, `requests`, `urllib`, or socket usage anywhere in the codebase — verified by inspection, not assumed. Git operations (`git log`, `git diff`, etc.) talk to your local Git repository only; ShipLift never runs `git push`/`git fetch`/`git clone` on your behalf.
+
+**Execution:** scripts are plain `bash`/`python3` with no `eval`, no dynamic code execution, and no shell interpolation of untrusted input. `python3 -B` is used to avoid writing `__pycache__` into your project.
+
+**Credentials:** ShipLift requires no API keys, tokens, or accounts. It reads only local Git history and locally stored Pulse evidence.
+
+**What we do *not* claim:** we don't say "100% local" or "no data ever leaves the machine" as a blanket guarantee — that depends on what your coding agent itself does with the conversation (e.g., if your agent sends conversation content to a cloud model, that's the agent's behavior, not ShipLift's). What we can state from the code: ShipLift's own scripts perform no network I/O and no telemetry.
+
+---
+
+# 🧭 Compatibility
+
+- **Generic Agent Skills** (`SKILL.md` at the repository root): works with any agent that supports the open Agent Skills format — installable via the [Skills CLI](#recommended--skills-cli) or [GitHub CLI](#github-cli) into Claude Code, OpenAI Codex, Cursor, and others.
+- **Claude Code plugin packaging** (`.claude-plugin/plugin.json` + `marketplace.json`): Claude Code–specific, enables native `/plugin marketplace add` / `/plugin install` management. Other agents ignore this directory.
+- ShipLift makes no assumptions about your repository's language, framework, test runner, or CI system — see [Implementation Details](SKILL.md#implementation-details) in `SKILL.md`.
+
+---
+
+# ✅ Validation
+
+Before relying on a change to this skill, run:
+
+```bash
+python3 scripts/validate-skill.py           # structure, manifest, links, secrets, hard-coded paths
+python3 scripts/tests/test_behavioral_rules.py  # anti-inflation / evidence-safety rule checks
+bash scripts/test-evidence-engine.sh
+bash scripts/test-pulse-store.sh
+python3 scripts/test_evidence_engine.py
+```
+
+All five run automatically in CI (`.github/workflows/validate.yml`) on every push and pull request.
 
 ---
 

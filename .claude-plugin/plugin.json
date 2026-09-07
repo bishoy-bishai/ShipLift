@@ -11,18 +11,22 @@
   "repository": "https://github.com/bishoy-bishai/ShipLift",
   "license": "MIT",
   "keywords": [
+    "agent-skills",
+    "ai-agent",
     "engineering",
     "git",
     "developer-productivity",
-    "performance-review",
     "engineering-impact",
+    "performance-review",
+    "self-review",
+    "career-growth",
     "career",
     "standup",
     "one-on-one",
+    "resume",
     "cv",
-    "goals"
-  ],
-  "skills": [
-    "./"
+    "goals",
+    "claude-code",
+    "codex"
   ]
 }
