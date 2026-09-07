@@ -151,6 +151,8 @@ Better: Show actual performance benchmarks or measurements
 
 ## Inspection Checklist
 
+Use [Context Strategy](core/context-strategy.md) to decide which commits get a full diff read versus metadata-only skimming before working through this checklist — it avoids re-reading the same full history/diffs across commands without skipping anything the evidence actually needs.
+
 For each achievement candidate, inspect:
 
 - [ ] **Git history**: commits, messages, branches

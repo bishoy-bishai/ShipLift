@@ -325,6 +325,7 @@ See detailed documentation in the `references/` folder:
   - [Anti-Inflation](references/core/anti-inflation.md)
   - [Writing Constitution](references/core/writing-constitution.md)
   - [Humanization](references/core/humanization.md)
+  - [Context Strategy](references/core/context-strategy.md) — how to gather git evidence for a date range without re-scanning full history or reading every diff in full
 
 ---
 
@@ -374,6 +375,8 @@ When you receive a ShipLift command, follow this process:
 - Note role mode if specified (`Senior` / `Lead`) — affects emphasis only
 
 ### 3. Gather Repository Evidence
+
+For the date range from step 2, build/reuse the cached commit index (`scripts/repo-index.sh build` then `rank`) instead of re-scanning full git history and diffs from scratch — see [Context Strategy](references/core/context-strategy.md). Read full diffs for commits ranked `read_full_diff`; use metadata only (subject, files, line counts) for `skim_only` commits unless something in that metadata suggests it matters anyway. Fall back to direct `git log`/`git diff` if the index is unavailable.
 
 Inspect (in priority order):
 
@@ -595,7 +598,8 @@ shiplift/
 │       ├── blind-spots.md
 │       ├── anti-inflation.md
 │       ├── writing-constitution.md
-│       └── humanization.md
+│       ├── humanization.md
+│       └── context-strategy.md
 └── scripts/
     ├── git-analysis.sh               (repository snapshot helper)
     ├── pulse-store.sh                (Pulse EvidenceStore CLI)
@@ -604,7 +608,10 @@ shiplift/
     ├── evidence_engine.py
     ├── test-pulse-store.sh           (optional — test suite)
     ├── test-evidence-engine.sh       (optional — test suite)
-    └── test_evidence_engine.py       (optional — test suite)
+    ├── test_evidence_engine.py       (optional — test suite)
+    ├── repo-index.sh                 (Repository Index CLI)
+    ├── repo_index.py
+    └── test_repo_index.py            (optional — test suite)
 ```
 
 ---
